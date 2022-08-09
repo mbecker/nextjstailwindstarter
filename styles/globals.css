@@ -1,26 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  @apply bg-slate-100 font-sans text-sm min-h-screen relative leading-6 text-slate-700 p-0 m-0 min-w-full;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: none;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.page {
+  @apply flex flex-col min-h-screen min-w-full;
 }
 
-* {
-  box-sizing: border-box;
+.footer {
+  @apply bg-sky-500  text-slate-100 font-semibold tracking-wide;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+.link-footer {
+  @apply text-slate-100 hover:text-slate-300 underline hover:no-underline;
+}
+
+.main {
+  @apply flex-1;
+}
+
+.header-top {
+  @apply w-full border-b-[1px] border-solid border-slate-200;
+}
+
+.content {
+  @apply my-4;
+}
+
+.container {
+  @apply max-w-7xl mx-auto px-2 sm:px-4 lg:px-8;
+}
+
+.heading-1 {
+  @apply font-semibold leading-loose;;
+}
+
+.link {
+  @apply text-slate-600 hover:text-slate-900;
+}
+
+.btn-main {
+  @apply inline-flex items-center justify-center rounded-sm border border-transparent bg-sky-400 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto;
 }
