@@ -11,9 +11,9 @@ const people = [
 
 for (let index = 0; index < 4; index++) {
   people.push({
-    name: "Lindsay Walton" + index,
+    name: "Lindsay Walton2" + index,
     title: "Front-end Developer" + index,
-    email: "lindsay.walton@example.com",
+    email: "lindsay.walton2@example.com" + index,
     role: "Member",
   });
 }

@@ -44,18 +44,6 @@ const navigation = [
     hover: "hover:before:bg-cyan-500",
   },
   {
-    name: "Projects",
-    href: "#",
-    before: "before:bg-pink-500",
-    hover: "hover:before:bg-pink-500",
-  },
-  {
-    name: "Calendar",
-    href: "#",
-    before: "before:bg-rose-500",
-    hover: "hover:before:bg-rose-500",
-  },
-  {
     name: "Settings",
     href: "/settings",
     before: "before:bg-slate-500",
@@ -96,14 +84,15 @@ function mobileNav(open) {
       </div>
       <div className="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center">
         {/* NOTIFICATION */}
-        <button
-          type="button"
-          className="bg-slate-50 hover:bg-sky-500 flex-shrink-0 rounded-full p-1 text-slate-400 hover:text-sky-100 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-offset-white focus:ring-white"
-        >
-          <span className="sr-only">View notifications</span>
-          <BellIcon className="h-6 w-6" aria-hidden="true" />
-        </button>
-
+        <Link href="/notifications" passHref={true}>
+          <a
+            type="button"
+            className="bg-slate-50 hover:bg-sky-500 flex-shrink-0 rounded-full p-1 text-slate-400 hover:text-sky-100 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-offset-white focus:ring-white"
+          >
+            <span className="sr-only">View notifications</span>
+            <BellIcon className="h-6 w-6" aria-hidden="true" />
+          </a>
+        </Link>
         {/* Profile dropdown */}
         <Menu as="div" className="flex-shrink-0 relative ml-4">
           <div>
@@ -152,7 +141,10 @@ function mobileNav(open) {
 export default function Header() {
   const router = useRouter();
   return (
-    <Disclosure as="header" className="bg-slate-800 fixed z-50 top-0 left-0 right-0">
+    <Disclosure
+      as="header"
+      className="bg-slate-800 fixed z-50 top-0 left-0 right-0"
+    >
       {({ open }) => (
         <>
           <div className="w-full bg-white fixed z-50">
@@ -208,7 +200,11 @@ export default function Header() {
             </div>
           </div>
 
-          <Disclosure.Panel as="nav" className="lg:hidden mt-16 left-0 right-0 w-full" aria-label="Global">
+          <Disclosure.Panel
+            as="nav"
+            className="lg:hidden mt-16 left-0 right-0 w-full"
+            aria-label="Global"
+          >
             <div className="pt-2 pb-3 px-2 space-y-1">
               {navigation.map((item) => (
                 <Disclosure.Button
@@ -244,13 +240,15 @@ export default function Header() {
                     {user.email}
                   </div>
                 </div>
-                <button
-                  type="button"
-                  className="ml-auto flex-shrink-0 bg-gray-800 rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+                <Link href="/notifications" passHref={true}>
+                  <a
+                    type="button"
+                    className="ml-auto flex-shrink-0 bg-gray-800 rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  >
+                    <span className="sr-only">View notifications</span>
+                    <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  </a>
+                </Link>
               </div>
               <div className="mt-3 px-2 space-y-1">
                 {userNavigation.map((item) => (

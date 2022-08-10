@@ -1,19 +1,4 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+import Plans from './Plans'
 import {
   CreditCardIcon,
   KeyIcon,
@@ -75,15 +60,16 @@ export default function SettingsTwo() {
       <div className="space-y-6 sm:px-6 lg:px-0 lg:col-span-12">
         <form action="#" method="POST">
           <div className="rounded-md shadow-none  bg-white  mt-0">
-            <div className="p-6 border-b border-gray-100 ">
+            <div className="p-6 ">
               <h5 className="text-xl font-semibold">Emails</h5>
               <p className="text-slate-400 mt-2">
                 Email subscriptions for activity maps
               </p>
             </div>
+            
             <div className="px-6">
               <ul>
-                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6">
+                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6 relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none">
                   <div className="flex items-center">
                     <div className="ml-3">
                       <p className="font-semibold">No emails confirmed</p>
@@ -91,9 +77,9 @@ export default function SettingsTwo() {
                   </div>
                 </li>
 
-                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6">
+                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6 relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none">
                   <div className="flex items-center">
-                    <MailIcon className="w-6 h-6 fill-slate-500" />
+                    
                     <div className="ml-3">
                       <p className="font-semibold">mats.becker@gmail.com</p>
                       <p className="text-cyan-600 text-sm">Confirmed</p>
@@ -126,9 +112,8 @@ export default function SettingsTwo() {
                     </button>
                   </div>
                 </li>
-                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6">
+                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6 relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none">
                   <div className="flex items-center">
-                    <MailIcon className="w-6 h-6 fill-slate-500" />
                     <div className="ml-3">
                       <p className="font-semibold">mats.becker@gmail.com</p>
                       <p className="text-rose-400 text-sm">Not confirmed</p>
