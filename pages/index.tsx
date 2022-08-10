@@ -23,7 +23,7 @@ const Home: NextPage = () => {
   } = useContext(PocketBaseContext);
 
   useEffect(() => {
-    activitiesFetch();
+    activitiesFetch(undefined, false);
   }, []);
 
   return (
