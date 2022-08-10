@@ -31,54 +31,68 @@ const user = {
     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
 const navigation = [
-  { name: "Activities", href: "/", before: "before:bg-sky-500", hover: "hover:before:bg-sky-500" },
-  { name: "Components", href: "/components", before: "before:bg-cyan-500", hover: "hover:before:bg-cyan-500" },
-  { name: "Projects", href: "#", before: "before:bg-pink-500", hover: "hover:before:bg-pink-500" },
-  { name: "Calendar", href: "#", before: "before:bg-rose-500", hover: "hover:before:bg-rose-500" },
-  { name: "Settings", href: "/settings", before: "before:bg-slate-500", hover: "hover:before:bg-slate-500" },
+  {
+    name: "Activities",
+    href: "/",
+    before: "before:bg-sky-500",
+    hover: "hover:before:bg-sky-500",
+  },
+  {
+    name: "Components",
+    href: "/components",
+    before: "before:bg-cyan-500",
+    hover: "hover:before:bg-cyan-500",
+  },
+  {
+    name: "Projects",
+    href: "#",
+    before: "before:bg-pink-500",
+    hover: "hover:before:bg-pink-500",
+  },
+  {
+    name: "Calendar",
+    href: "#",
+    before: "before:bg-rose-500",
+    hover: "hover:before:bg-rose-500",
+  },
+  {
+    name: "Settings",
+    href: "/settings",
+    before: "before:bg-slate-500",
+    hover: "hover:before:bg-slate-500",
+  },
 ];
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
-
-
+const userNavigation = [{ name: "Sign out", href: "#" }];
 
 function mobileNav(open) {
   return (
     <>
       <div className="w-full flex lg:hidden">
-      <div className="relative z-10 flex items-center ">
-        {/* Mobile menu button */}
-        <Disclosure.Button className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-          <span className="sr-only">Open menu</span>
-          {open ? (
-            <XIcon className="block h-6 w-6" aria-hidden="true" />
-          ) : (
-            <MenuIcon className="block h-6 w-6" aria-hidden="true" />
-          )}
-        </Disclosure.Button>
-
-
-      </div>
-      <div className="flex-1 flex items-center justify-end">
-      <svg
-className="w-10 h-10"
-  viewBox="0 0 122 104"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlnsXlink="http://www.w3.org/1999/xlink"
->
-  <path
-    fill="#ff0066"
-    stroke="none"
-    d="M 107.300003 43.400002 C 117.899994 64 123.300003 85.400002 115.399994 94 C 107.5 102.599998 86.199997 98.400002 62.800003 99.699997 C 39.300003 101 13.5 107.800003 4.700001 98.599998 C -4.099998 89.5 3.900002 64.5 16.799999 42.5 C 29.699997 20.600006 47.300003 1.699997 64.099998 2.300003 C 80.800003 2.800003 96.600006 22.699997 107.300003 43.400002 Z"
-  />
-</svg>
-
-
-
-      </div>
+        <div className="relative z-10 flex items-center ">
+          {/* Mobile menu button */}
+          <Disclosure.Button className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-slate-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+            <span className="sr-only">Open menu</span>
+            {open ? (
+              <XIcon className="block h-6 w-6" aria-hidden="true" />
+            ) : (
+              <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+            )}
+          </Disclosure.Button>
+        </div>
+        <div className="flex-1 flex items-center justify-end">
+          <svg
+            className="w-10 h-10"
+            viewBox="0 0 122 104"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+          >
+            <path
+              fill="#ff0066"
+              stroke="none"
+              d="M 107.300003 43.400002 C 117.899994 64 123.300003 85.400002 115.399994 94 C 107.5 102.599998 86.199997 98.400002 62.800003 99.699997 C 39.300003 101 13.5 107.800003 4.700001 98.599998 C -4.099998 89.5 3.900002 64.5 16.799999 42.5 C 29.699997 20.600006 47.300003 1.699997 64.099998 2.300003 C 80.800003 2.800003 96.600006 22.699997 107.300003 43.400002 Z"
+            />
+          </svg>
+        </div>
       </div>
       <div className="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center">
         {/* NOTIFICATION */}
@@ -138,7 +152,7 @@ className="w-10 h-10"
 export default function Header() {
   const router = useRouter();
   return (
-    <Disclosure as="header" className="dark:bg-gray-800 bg-white">
+    <Disclosure as="header" className="bg-slate-800">
       {({ open }) => (
         <>
           <div className="w-full bg-white">
@@ -165,27 +179,27 @@ export default function Header() {
                   aria-label="Global"
                 >
                   {navigation.map((item, i) => (
-                    <Link key={item.name}
-                    href={item.href}>
-                    <a
-                      
-                      className={classNames(
-                        router.pathname === item.href
-                          ? `${item.before} italic`
-                          : `${item.hover} hover:italic`,
-                        "group before:-inset-1 before:-skew-y-3 before:block before:absolute px-2 relative inline-block"
-                      )}
-                      aria-current={router.pathname === item.href ? "page" : undefined}
-                    >
-                      <span
+                    <Link key={item.name} href={item.href}>
+                      <a
                         className={classNames(
-                          router.pathname === item.href ? "text-white" : "",
-                          "relative group-hover:text-white"
+                          router.pathname === item.href
+                            ? `${item.before} italic`
+                            : `${item.hover} hover:italic`,
+                          "group before:-inset-1 before:-skew-y-3 before:block before:absolute px-2 relative inline-block"
                         )}
+                        aria-current={
+                          router.pathname === item.href ? "page" : undefined
+                        }
                       >
-                        {item.name}
-                      </span>
-                    </a>
+                        <span
+                          className={classNames(
+                            router.pathname === item.href ? "text-white" : "",
+                            "relative group-hover:text-white"
+                          )}
+                        >
+                          {item.name}
+                        </span>
+                      </a>
                     </Link>
                   ))}
                 </nav>
@@ -205,7 +219,7 @@ export default function Header() {
                     item.current
                       ? "bg-gray-900 text-white"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block rounded-md py-2 px-3 text-base font-medium"
+                    "block rounded-none py-2 px-3 text-base font-medium"
                   )}
                   aria-current={item.current ? "page" : undefined}
                 >
@@ -244,7 +258,7 @@ export default function Header() {
                     key={item.name}
                     as="a"
                     href={item.href}
-                    className="block rounded-md py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    className="block rounded-none py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                   >
                     {item.name}
                   </Disclosure.Button>
