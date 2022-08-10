@@ -1,3 +1,5 @@
+import { Activities } from "../common/Strava";
+
 /* This example requires Tailwind CSS v2.0+ */
 const people = [
   {
@@ -18,7 +20,20 @@ for (let index = 0; index < 4; index++) {
   });
 }
 
-export default function Example() {
+type Props = {
+  activities: Activities;
+};
+
+const options: Intl.DateTimeFormatOptions = {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+};
+
+export default function Table({ activities }: Props) {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="mt-8 flex flex-col">
@@ -43,26 +58,26 @@ export default function Example() {
                         >
                           <path d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
                         </svg>
-                        <span className="ml-0">ID</span>
+                        <span className="ml-0">Name</span>
                       </span>
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Title
+                      Distance (km)
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Email
+                      Start Date
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Role
+                      Moving Time
                     </th>
                     <th
                       scope="col"
@@ -73,23 +88,29 @@ export default function Example() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {people.map((person) => (
-                    <tr key={person.email} className="hover:bg-slate-50">
+                  {activities.map((activity) => (
+                    <tr key={activity.id} className="hover:bg-slate-50">
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                        {person.name}
+                        {activity.name}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {person.title}
+                        {(activity.distance / 1000).toFixed(2)}km
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {person.email}
+                        {new Date(
+                          activity.start_date_local as any
+                        ).toLocaleDateString(undefined, options)}
+                        h
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {person.role}
+                        {new Date((activity.moving_time as number) * 1000)
+                          .toISOString()
+                          .substring(11, 16)}
+                        h
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
                         <a href="#" className="link">
-                          Edit<span className="sr-only">, {person.name}</span>
+                          Edit<span className="sr-only">, {activity.id}</span>
                         </a>
                       </td>
                     </tr>
