@@ -1,19 +1,3 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { SearchIcon } from "@heroicons/react/solid";
@@ -23,6 +7,8 @@ import Link from "next/link";
 import { classNames } from "../utils/classes";
 
 import { useRouter } from "next/router";
+import { useSession, signOut, signIn } from "next-auth/react";
+import { Session } from "next-auth";
 
 const user = {
   name: "Tom Cook",
@@ -52,23 +38,23 @@ const navigation = [
 ];
 const userNavigation = [{ name: "Sign out", href: "#" }];
 
-function mobileNav(open) {
+function mobileNav(open: boolean, image?: string) {
   return (
     <>
       <div className="lg:hidden relative z-10 flex items-center ">
-          {/* Mobile menu button */}
-          <Disclosure.Button className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-slate-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-            <span className="sr-only">Open menu</span>
-            {open ? (
-              <XIcon className="block h-6 w-6" aria-hidden="true" />
-            ) : (
-              <MenuIcon className="block h-6 w-6" aria-hidden="true" />
-            )}
-          </Disclosure.Button>
-        </div>
+        {/* Mobile menu button */}
+        <Disclosure.Button className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-slate-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+          <span className="sr-only">Open menu</span>
+          {open ? (
+            <XIcon className="block h-6 w-6" aria-hidden="true" />
+          ) : (
+            <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+          )}
+        </Disclosure.Button>
+      </div>
       <div className="relative z-10 pr-2 lg:p-0 ml-4 flex items-center">
         {/* NOTIFICATION */}
-        <Link href="/notifications" >
+        <Link href="/notifications">
           <a
             type="button"
             className="bg-slate-50 hover:bg-sky-500 flex-shrink-0 rounded-full p-1 text-slate-400 hover:text-sky-100 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-offset-white focus:ring-white"
@@ -78,15 +64,73 @@ function mobileNav(open) {
           </a>
         </Link>
         {/* Profile dropdown */}
+
         <Menu as="div" className="flex-shrink-0 relative ml-4">
           <div>
-            <Menu.Button className="bg-gray-800 rounded-full flex text-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-200 focus:ring-white">
+            <Menu.Button className="800 rounded-full flex text-sm text-white focus:outline-none">
               <span className="sr-only">Open user menu</span>
-              <img
-                className="h-8 w-8 rounded-full"
-                src={user.imageUrl}
-                alt=""
-              />
+              {typeof image !== "undefined" && (
+                <img src={image} className="w-8 h-8 rounded-full" />
+              )}
+              {typeof image === "undefined" && (
+                <svg
+                  viewBox="0 0 36 36"
+                  fill="none"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-8 h-8 rounded-full"
+                >
+                  <title>Mary Roebling</title>
+                  <mask
+                    id="mask__beam"
+                    maskUnits="userSpaceOnUse"
+                    x={0}
+                    y={0}
+                    width={36}
+                    height={36}
+                  >
+                    <rect width={36} height={36} fill="#FFFFFF" />
+                  </mask>
+                  <g mask="url(#mask__beam)">
+                    <rect width={36} height={36} fill="#f0f0d8" />
+                    <rect
+                      x={0}
+                      y={0}
+                      width={36}
+                      height={36}
+                      transform="translate(5 -1) rotate(155 18 18) scale(1.2)"
+                      fill="#000000"
+                      rx={6}
+                    />
+                    <g transform="translate(3 -4) rotate(-5 18 18)">
+                      <path
+                        d="M15 21c2 1 4 1 6 0"
+                        stroke="#FFFFFF"
+                        fill="none"
+                        strokeLinecap="round"
+                      />
+                      <rect
+                        x={14}
+                        y={14}
+                        width="1.5"
+                        height={2}
+                        rx={1}
+                        stroke="none"
+                        fill="#FFFFFF"
+                      />
+                      <rect
+                        x={20}
+                        y={14}
+                        width="1.5"
+                        height={2}
+                        rx={1}
+                        stroke="none"
+                        fill="#FFFFFF"
+                      />
+                    </g>
+                  </g>
+                </svg>
+              )}
             </Menu.Button>
           </div>
           <Transition
@@ -98,22 +142,30 @@ function mobileNav(open) {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none">
-              {userNavigation.map((item) => (
-                <Menu.Item key={item.name}>
-                  {({ active }) => (
-                    <a
-                      href={item.href}
-                      className={classNames(
-                        active ? "bg-gray-100" : "",
-                        "block py-2 px-4 text-sm text-gray-700"
-                      )}
-                    >
-                      {item.name}
-                    </a>
-                  )}
-                </Menu.Item>
-              ))}
+            <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-0 focus:outline-none">
+              <Menu.Item key={"signout"}>
+                <button
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="hover:bg-slate-100 block py-2 px-4 text-sm text-gray-700 w-full text-left"
+                >
+                  Sign out
+                </button>
+              </Menu.Item>
+              {/* {userNavigation.map((item) => (
+                  <Menu.Item key={item.name}>
+                    {({ active }) => (
+                      <button
+                        
+                        className={classNames(
+                          active ? "bg-gray-100" : "",
+                          "block py-2 px-4 text-sm text-gray-700 w-full text-left"
+                        )}
+                      >
+                        {item.name}
+                      </button>
+                    )}
+                  </Menu.Item>
+                ))} */}
             </Menu.Items>
           </Transition>
         </Menu>
@@ -124,6 +176,8 @@ function mobileNav(open) {
 
 export default function Header() {
   const router = useRouter();
+  const { data: session } = useSession();
+  console.log(session);
   return (
     <Disclosure
       as="header"
@@ -132,7 +186,8 @@ export default function Header() {
       {({ open }) => (
         <>
           <div className="w-full bg-white fixed z-50">
-            <div className="hidden header-top">
+            {/* Top Header Bar - Hidden (pnly for development) */}
+            {/* <div className="hidden header-top">
               <div className="container">
                 <div className="relative h-16 flex justify-between">
                   <div className="relative z-10 px-2 flex lg:px-0">
@@ -144,10 +199,11 @@ export default function Header() {
                       />
                     </div>
                   </div>
-                  {mobileNav(open)}
+                  {mobileNav(open, session)}
                 </div>
               </div>
-            </div>
+            </div> */}
+
             <div className="header-nav">
               <div className="container relative h-16 flex items-center justify-between">
                 <nav
@@ -179,7 +235,8 @@ export default function Header() {
                     </Link>
                   ))}
                 </nav>
-                {mobileNav(open)}
+
+                {mobileNav(open, session!.user.image)}
               </div>
             </div>
           </div>
@@ -196,12 +253,14 @@ export default function Header() {
                   as="a"
                   href={item.href}
                   className={classNames(
-                    item.current
+                    router.pathname === item.href
                       ? "bg-gray-900 text-white"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white",
                     "block rounded-none py-2 px-3 text-base font-medium"
                   )}
-                  aria-current={item.current ? "page" : undefined}
+                  aria-current={
+                    router.pathname === item.href ? "page" : undefined
+                  }
                 >
                   {item.name}
                 </Disclosure.Button>
@@ -224,18 +283,16 @@ export default function Header() {
                     {user.email}
                   </div>
                 </div>
-                
-                
-                <Disclosure.Button href="/notifications" as="a" type="button"
-                    className="ml-auto flex-shrink-0 bg-gray-800 rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                  
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  
-                  </Disclosure.Button>
-                
-        
-               
+
+                <Disclosure.Button
+                  href="/notifications"
+                  as="a"
+                  type="button"
+                  className="ml-auto flex-shrink-0 bg-gray-800 rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                >
+                  <span className="sr-only">View notifications</span>
+                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+                </Disclosure.Button>
               </div>
               <div className="mt-3 px-2 space-y-1">
                 {userNavigation.map((item) => (

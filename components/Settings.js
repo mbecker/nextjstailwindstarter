@@ -6,7 +6,7 @@ import {
   UserGroupIcon,
   ViewGridAddIcon,
 } from "@heroicons/react/outline";
-import { MailIcon, RefreshIcon } from "@heroicons/react/solid";
+import { CheckCircleIcon, CheckIcon, MailIcon, RefreshIcon } from "@heroicons/react/solid";
 import { ExclamationCircleIcon } from "@heroicons/react/solid";
 const navigation = [
   { name: "Account", href: "#", icon: UserCircleIcon, current: true },
@@ -76,47 +76,15 @@ export default function SettingsTwo() {
                     </div>
                   </div>
                 </li>
-
-                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6 relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none">
+                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 relative cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none">
                   <div className="flex items-center">
-                    
-                    <div className="ml-3">
-                      <p className="font-semibold">mats.becker@gmail.com</p>
-                      <p className="text-cyan-600 text-sm">Confirmed</p>
-                    </div>
-                  </div>
-                  <div className="flex space-x-2 items-center justify-center">
-                    <button className="inline-flex items-center justify-center bg-slate-400 bg-opacity-10 hover:bg-opacity-30 py-2 px-4 space-x-2 text-slate-600 hover:text-slate-600">
-                      Send new confirmation
-                      <RefreshIcon className="w-4 h-4 ml-1" />
-                    </button>
-                    <button className="inline-flex items-center justify-center bg-slate-400 bg-opacity-10 hover:bg-opacity-30 py-2 px-4 space-x-2 text-rose-600 hover:text-rose-600">
-                      Delete
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={24}
-                        height={24}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-4 w-4 ml-1"
-                      >
-                        <polyline points="3 6 5 6 21 6" />
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                        <line x1={10} y1={11} x2={10} y2={17} />
-                        <line x1={14} y1={11} x2={14} y2={17} />
-                      </svg>
-                    </button>
-                  </div>
-                </li>
-                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6 relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none">
-                  <div className="flex items-center">
-                    <div className="ml-3">
-                      <p className="font-semibold">mats.becker@gmail.com</p>
-                      <p className="text-rose-400 text-sm">Not confirmed</p>
+                    <div className="ml-0">
+                      <div className='flex space-x-2 items-center justify-center'>
+                      <CheckCircleIcon className='w-6 h-6 text-cyan-400' />
+                      <ExclamationCircleIcon className='w-6 h-6 text-pink-400' />
+                      <p className="font-semibold text-lg">mats.becker@gmail.com</p>
+                      </div>
+                      <p className="ml-1 text-pink-400 text-sm font-semibold">Not confirmed</p>
                     </div>
                   </div>
                   <div className="flex space-x-2 items-center justify-center">
