@@ -21,7 +21,8 @@ import {
   UserGroupIcon,
   ViewGridAddIcon,
 } from "@heroicons/react/outline";
-
+import { MailIcon, RefreshIcon } from "@heroicons/react/solid";
+import { ExclamationCircleIcon } from "@heroicons/react/solid";
 const navigation = [
   { name: "Account", href: "#", icon: UserCircleIcon, current: true },
   { name: "Password", href: "#", icon: KeyIcon, current: false },
@@ -37,7 +38,7 @@ function classNames(...classes) {
 export default function SettingsTwo() {
   return (
     <div className="lg:grid lg:grid-cols-12 lg:gap-x-5">
-      <aside className="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
+      <aside className="hidden py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
         <nav className="space-y-1">
           {navigation.map((item) => (
             <a
@@ -71,77 +72,40 @@ export default function SettingsTwo() {
         </nav>
       </aside>
 
-      <div className="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
+      <div className="space-y-6 sm:px-6 lg:px-0 lg:col-span-12">
         <form action="#" method="POST">
-          <div className="rounded-md shadow  bg-white  mt-0">
+          <div className="rounded-md shadow-none  bg-white  mt-0">
             <div className="p-6 border-b border-gray-100 ">
-              <h5 className="text-xl font-semibold">Payment Methods</h5>
+              <h5 className="text-xl font-semibold">Emails</h5>
               <p className="text-slate-400 mt-2">
-                Primary payment method is used by default
+                Email subscriptions for activity maps
               </p>
             </div>
             <div className="px-6">
               <ul>
-                <li className="flex justify-between items-center py-6">
+                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6">
                   <div className="flex items-center">
-                    <img
-                      src="assets/images/payments/visa.png"
-                      className="rounded shadow w-12"
-                      alt=""
-                    />
                     <div className="ml-3">
-                      <p className="font-semibold">Visa ending in 4578</p>
-                      <p className="text-slate-400 text-sm">
-                        Expires in 12/2022
-                      </p>
+                      <p className="font-semibold">No emails confirmed</p>
                     </div>
-                  </div>
-                  <div>
-                    <a
-                      href=""
-                      className="btn btn-icon bg-red-600/5 hover:bg-red-600 border-red-600/10 hover:border-red-600 text-red-600 hover:text-white rounded-full"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={24}
-                        height={24}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="feather feather-trash-2 h-4 w-4"
-                      >
-                        <polyline points="3 6 5 6 21 6" />
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                        <line x1={10} y1={11} x2={10} y2={17} />
-                        <line x1={14} y1={11} x2={14} y2={17} />
-                      </svg>
-                    </a>
                   </div>
                 </li>
-                <li className="flex justify-between items-center py-6 border-t border-gray-100 ">
+
+                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6">
                   <div className="flex items-center">
-                    <img
-                      src="assets/images/payments/american-ex.png"
-                      className="rounded shadow w-12"
-                      alt=""
-                    />
+                    <MailIcon className="w-6 h-6 fill-slate-500" />
                     <div className="ml-3">
-                      <p className="font-semibold">
-                        American Express ending in 4578
-                      </p>
-                      <p className="text-slate-400 text-sm">
-                        Expires in 12/2022
-                      </p>
+                      <p className="font-semibold">mats.becker@gmail.com</p>
+                      <p className="text-cyan-600 text-sm">Confirmed</p>
                     </div>
                   </div>
-                  <div>
-                    <a
-                      href=""
-                      className="btn btn-icon bg-red-600/5 hover:bg-red-600 border-red-600/10 hover:border-red-600 text-red-600 hover:text-white rounded-full"
-                    >
+                  <div className="flex space-x-2 items-center justify-center">
+                    <button className="inline-flex items-center justify-center bg-slate-400 bg-opacity-10 hover:bg-opacity-30 py-2 px-4 space-x-2 text-slate-600 hover:text-slate-600">
+                      Send new confirmation
+                      <RefreshIcon className="w-4 h-4 ml-1" />
+                    </button>
+                    <button className="inline-flex items-center justify-center bg-slate-400 bg-opacity-10 hover:bg-opacity-30 py-2 px-4 space-x-2 text-rose-600 hover:text-rose-600">
+                      Delete
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width={24}
@@ -152,35 +116,31 @@ export default function SettingsTwo() {
                         strokeWidth={2}
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="feather feather-trash-2 h-4 w-4"
+                        className="h-4 w-4 ml-1"
                       >
                         <polyline points="3 6 5 6 21 6" />
                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                         <line x1={10} y1={11} x2={10} y2={17} />
                         <line x1={14} y1={11} x2={14} y2={17} />
                       </svg>
-                    </a>
+                    </button>
                   </div>
                 </li>
-                <li className="flex justify-between items-center py-6 border-t border-gray-100 ">
+                <li className="flex flex-col sm:flex-row sm:justify-between sm:items-center items-start justify-start space-y-4 py-6">
                   <div className="flex items-center">
-                    <img
-                      src="assets/images/payments/discover.png"
-                      className="rounded shadow  w-12"
-                      alt=""
-                    />
+                    <MailIcon className="w-6 h-6 fill-slate-500" />
                     <div className="ml-3">
-                      <p className="font-semibold">Discover ending in 4578</p>
-                      <p className="text-slate-400 text-sm">
-                        Expires in 12/2022
-                      </p>
+                      <p className="font-semibold">mats.becker@gmail.com</p>
+                      <p className="text-rose-400 text-sm">Not confirmed</p>
                     </div>
                   </div>
-                  <div>
-                    <a
-                      href=""
-                      className="btn btn-icon bg-red-600/5 hover:bg-red-600 border-red-600/10 hover:border-red-600 text-red-600 hover:text-white rounded-full"
-                    >
+                  <div className="flex space-x-2 items-center justify-center">
+                    <button className="inline-flex items-center justify-center bg-slate-400 bg-opacity-10 hover:bg-opacity-30 py-2 px-4 space-x-2 text-slate-600 hover:text-slate-600">
+                      Send new confirmation
+                      <RefreshIcon className="w-4 h-4 ml-1" />
+                    </button>
+                    <button className="inline-flex items-center justify-center bg-slate-400 bg-opacity-10 hover:bg-opacity-30 py-2 px-4 space-x-2 text-rose-600 hover:text-rose-600">
+                      Delete
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width={24}
@@ -191,70 +151,66 @@ export default function SettingsTwo() {
                         strokeWidth={2}
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="feather feather-trash-2 h-4 w-4"
+                        className="h-4 w-4 ml-1"
                       >
                         <polyline points="3 6 5 6 21 6" />
                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                         <line x1={10} y1={11} x2={10} y2={17} />
                         <line x1={14} y1={11} x2={14} y2={17} />
                       </svg>
-                    </a>
-                  </div>
-                </li>
-                <li className="flex justify-between items-center py-6 border-t border-gray-100 ">
-                  <div className="flex items-center">
-                    <img
-                      src="assets/images/payments/master-card.png"
-                      className="rounded shadow w-12"
-                      alt=""
-                    />
-                    <div className="ml-3">
-                      <p className="font-semibold">
-                        Master Card ending in 4578
-                      </p>
-                      <p className="text-slate-400 text-sm">
-                        Expires in 12/2022
-                      </p>
-                    </div>
-                  </div>
-                  <div>
-                    <a
-                      href=""
-                      className="btn btn-icon bg-red-600/5 hover:bg-red-600 border-red-600/10 hover:border-red-600 text-red-600 hover:text-white rounded-full"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={24}
-                        height={24}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="feather feather-trash-2 h-4 w-4"
-                      >
-                        <polyline points="3 6 5 6 21 6" />
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                        <line x1={10} y1={11} x2={10} y2={17} />
-                        <line x1={14} y1={11} x2={14} y2={17} />
-                      </svg>
-                    </a>
+                    </button>
                   </div>
                 </li>
                 <li className="py-6 border-t border-gray-100 ">
-                  <a
+                  <div className="mb-4">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Add new email
+                    </label>
+                    <div className="mt-1 relative rounded-md shadow-sm">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <MailIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        className="block w-full pl-10 pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                        placeholder="you@example.com"
+                        defaultValue="adamwathan"
+                        aria-invalid="true"
+                        aria-describedby="email-error"
+                      />
+                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <ExclamationCircleIcon
+                          className="h-5 w-5 text-red-500"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </div>
+                    <p className="mt-2 text-sm text-red-600" id="email-error">
+                      Your password must be less than 4 characters.
+                    </p>
+                  </div>
+
+                  <button
+                    disabled={true}
                     href="#!"
                     data-modal-toggle="paymentMethod"
-                    className="btn-main  text-white rounded-md"
+                    className="btn-main"
                   >
-                    Add Payment Method
-                  </a>
+                    Submit new email
+                  </button>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="ring-1 ring-slate-200 ring-opacity-5 shadow sm:rounded-md sm:overflow-hidden">
+          <div className="hidden ring-1 ring-slate-200 ring-opacity-5 shadow sm:rounded-md sm:overflow-hidden">
             <div className="bg-white py-6 px-4 space-y- sm:p-6">
               <div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
