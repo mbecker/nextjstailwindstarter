@@ -20,7 +20,7 @@ const client = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
  */
 
 function Strava(): Promise<OAuthConfig<any>> {
-  let redirectURILocal = "http://localhost:3000/api/auth/callback/strava";
+  let redirectURILocal = `${process.env.NEXTAUTH_URL}/api/auth/callback/strava`;
 
   let stravaAuthOptions: OAuthConfig<any> = {
     id: "strava",
@@ -150,7 +150,7 @@ function Strava(): Promise<OAuthConfig<any>> {
                       "response_type": "code",
                       "scope": "read_all,profile:read_all,activity:read_all",
                       "state": "rwxv7bAy8DuPLEweDWEyTCKCVzdYtv",
-                      "redirect_uri": "http://localhost:3000/api/auth/callback/strava"
+                      "redirect_uri": `${process.env.NEXTAUTH_URL}/api/auth/callback/strava"
                     }
                   },
                   "token": {
@@ -165,8 +165,8 @@ function Strava(): Promise<OAuthConfig<any>> {
                   "clientId": "5831",
                   "clientSecret": "71edb8f9001c83d753db1434a53353f2f38dcda6",
                   "idToken": false,
-                  "signinUrl": "http://localhost:3000/api/auth/signin/strava",
-                  "callbackUrl": "http://localhost:3000/api/auth/callback/strava"
+                  "signinUrl": `${process.env.NEXTAUTH_URL}/api/auth/signin/strava",
+                  "callbackUrl": `${process.env.NEXTAUTH_URL}/api/auth/callback/strava"
                 },
                 "tokens": {
                   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjEzNTk4NjgsImlkIjoiSmdWeHJDcXZsb3Zxdk1oIiwidHlwZSI6InVzZXIifQ.1YGpt2Tg_qfFwmvnSDHBNM5bOUdjS-jP7tlaoc98C8E"
@@ -184,7 +184,7 @@ function Strava(): Promise<OAuthConfig<any>> {
                   "client_id": "5831",
                   "client_secret": "71edb8f9001c83d753db1434a53353f2f38dcda6",
                   "redirect_uris": [
-                    "http://localhost:3000/api/auth/callback/strava"
+                    `${process.env.NEXTAUTH_URL}/api/auth/callback/strava"
                   ]
                 }
               }
