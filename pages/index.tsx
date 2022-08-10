@@ -30,7 +30,7 @@ const Home: NextPage = () => {
     <div
       className={`overflow-hidden shadow ring-1 ring-slate-200 ring-opacity-5 md:rounded-sm bg-white border-t-2 border-solid ${pageColor.border}`}
     >
-      <div className="flex items-start pt-4 px-4">
+      <div className="flex flex-col md:flex-row space-y-6 items-start pt-4 px-4">
         <div className="sm:flex-auto">
           <h1
             className={`text-2xl font-semibold italic before:block before:absolute before:-inset-1 before:-skew-y-3  relative inline-block ${pageColor.before}`}
