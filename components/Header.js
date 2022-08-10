@@ -48,7 +48,8 @@ const userNavigation = [
 function mobileNav(open) {
   return (
     <>
-      <div className="relative z-10 flex items-center lg:hidden">
+      <div className="w-full flex lg:hidden">
+      <div className="relative z-10 flex items-center ">
         {/* Mobile menu button */}
         <Disclosure.Button className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
           <span className="sr-only">Open menu</span>
@@ -58,6 +59,26 @@ function mobileNav(open) {
             <MenuIcon className="block h-6 w-6" aria-hidden="true" />
           )}
         </Disclosure.Button>
+
+
+      </div>
+      <div className="flex-1 flex items-center justify-end">
+      <svg
+className="w-10 h-10"
+  viewBox="0 0 122 104"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <path
+    fill="#ff0066"
+    stroke="none"
+    d="M 107.300003 43.400002 C 117.899994 64 123.300003 85.400002 115.399994 94 C 107.5 102.599998 86.199997 98.400002 62.800003 99.699997 C 39.300003 101 13.5 107.800003 4.700001 98.599998 C -4.099998 89.5 3.900002 64.5 16.799999 42.5 C 29.699997 20.600006 47.300003 1.699997 64.099998 2.300003 C 80.800003 2.800003 96.600006 22.699997 107.300003 43.400002 Z"
+  />
+</svg>
+
+
+
+      </div>
       </div>
       <div className="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center">
         {/* NOTIFICATION */}
