@@ -35,8 +35,6 @@ function MyApp({ Component, pageProps }: AppProps) {
             {/* <div className="bg-sky-500 h-12 relative bottom-0 -mb-4 shadow-sky-200 shadow origin-center rotate-1 scale-105 skew-x-0 skew-y-0 w-full min-w-min"></div> */}
 
             <Footer />
-
-            <Banner />
           </div>
         </PocketBaseProvider>
       </SessionProvider>

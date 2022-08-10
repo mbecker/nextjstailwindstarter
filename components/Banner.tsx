@@ -9,7 +9,7 @@ type Props = {
 export default function Banner({ message }: Props) {
   const [showBanner, setShowBanner] = useState(true);
 
-  if (showBanner) {
+  if (!showBanner) {
     return null;
   }
 
