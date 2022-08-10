@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function Banner() {
   const [showBanner, setShowBanner] = useState(true);
   
-  if(!showBanner) {
+  if(showBanner) {
     return null;
   }
   

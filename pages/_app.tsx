@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <div className="page">
       <div className="main mb-12">
         <Header />
-        <main className="content container">
+        <main className="content container pt-16">
           <Component {...pageProps} />
         </main>
       </div>

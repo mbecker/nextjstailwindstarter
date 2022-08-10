@@ -152,10 +152,10 @@ function mobileNav(open) {
 export default function Header() {
   const router = useRouter();
   return (
-    <Disclosure as="header" className="bg-slate-800">
+    <Disclosure as="header" className="bg-slate-800 fixed z-50 top-0 left-0 right-0">
       {({ open }) => (
         <>
-          <div className="w-full bg-white">
+          <div className="w-full bg-white fixed z-50">
             <div className="hidden header-top">
               <div className="container">
                 <div className="relative h-16 flex justify-between">
@@ -208,7 +208,7 @@ export default function Header() {
             </div>
           </div>
 
-          <Disclosure.Panel as="nav" className="lg:hidden" aria-label="Global">
+          <Disclosure.Panel as="nav" className="lg:hidden mt-16 left-0 right-0 w-full" aria-label="Global">
             <div className="pt-2 pb-3 px-2 space-y-1">
               {navigation.map((item) => (
                 <Disclosure.Button
