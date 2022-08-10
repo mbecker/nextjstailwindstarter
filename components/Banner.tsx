@@ -2,13 +2,17 @@
 import { SpeakerphoneIcon, XIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 
-export default function Banner() {
+type Props = {
+  message: string;
+};
+
+export default function Banner({ message }: Props) {
   const [showBanner, setShowBanner] = useState(true);
-  
-  if(showBanner) {
+
+  if (showBanner) {
     return null;
   }
-  
+
   return (
     <div className="z-50 fixed bottom-2 inset-x-0 pb-2 sm:pb-0">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -22,10 +26,7 @@ export default function Banner() {
                 />
               </span>
               <p className="ml-3 font-medium text-white truncate">
-                <span className="md:hidden">We announced a new product!</span>
-                <span className="hidden md:inline">
-                  Big news! We are excited to announce a brand new product.
-                </span>
+                <span className="hidden md:inline">{message}</span>
               </p>
             </div>
             <div className="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
@@ -38,15 +39,18 @@ export default function Banner() {
             </div>
             <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
               <button
-              onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-                setShowBanner(!showBanner);
-              }}
+                onClick={(e: React.MouseEvent) => {
+                  e.preventDefault();
+                  setShowBanner(!showBanner);
+                }}
                 type="button"
                 className="-mr-1 flex p-2 rounded-md hover:bg-slate-50 group group-hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-white"
               >
                 <span className="sr-only">Dismiss</span>
-                <XIcon className="h-6 w-6 text-white group-hover:text-slate-900" aria-hidden="true" />
+                <XIcon
+                  className="h-6 w-6 text-white group-hover:text-slate-900"
+                  aria-hidden="true"
+                />
               </button>
             </div>
           </div>

@@ -34,6 +34,7 @@ import React, {
   useState,
 } from "react";
 import { Activities, Activity } from "../common/Strava";
+import Banner from "../components/Banner";
 
 export type AFTER = "after";
 export type BEFORE = "before";
@@ -50,7 +51,7 @@ export interface PocketBaseContext {
     date?: string,
     showToast?: boolean,
     beforeAfter?: BEFORE | AFTER,
-    id?: string|number,
+    id?: string | number
   ) => Promise<void>;
   activitiesFetchForce: (
     date?: string,
@@ -94,12 +95,18 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
       date?: string,
       showToast?: boolean,
       beforeAfter?: BEFORE | AFTER,
-      id?: string|number|undefined,
+      id?: string | number | undefined
     ) => {
-      console.log("=== PocketBaseProvider - activitiesFect: ", date, showToast, beforeAfter, id)
+      console.log(
+        "=== PocketBaseProvider - activitiesFect: ",
+        date,
+        showToast,
+        beforeAfter,
+        id
+      );
       let queryParams: any = {
         sort: "-start_date",
-        filter: ''
+        filter: "",
       };
       if (typeof date !== "undefined") {
         date = date.replace("T", " ").replace("Z", "");
@@ -117,10 +124,12 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
         );
       }
 
-      if(typeof id !== 'undefined') {
+      if (typeof id !== "undefined") {
         queryParams = {
           ...queryParams,
-          filter: `${queryParams.filter.length > 0 ? `AND ` : `activityid ~ ${id}`}`,
+          filter: `${
+            queryParams.filter.length > 0 ? `AND ` : `activityid ~ ${id}`
+          }`,
         };
       }
 
@@ -171,14 +180,14 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
           });
         }
         setActivities(newItems);
-        console.log(
-          "=== PocketBaseProvider: result.items=",
-          result
-        );
+        console.log("=== PocketBaseProvider: result.items=", result);
 
         // The reuest is 'force' (Strava was requested before): The page.items may be 0 (or any number) because no new Strava activities are uploaded
         if (typeof beforeAfter !== "undefined" && beforeAfter === BEFORE) {
-          console.log("setActivitiesHasMore: ", result.items.length !== 0 && result.items.length === 20);
+          console.log(
+            "setActivitiesHasMore: ",
+            result.items.length !== 0 && result.items.length === 20
+          );
           setActivitiesHasMore(
             result.items.length !== 0 && result.items.length === 20
           );
@@ -311,29 +320,7 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
       <>
         {children}
         {typeof message.message !== "undefined" && (
-          <div
-            className={classNames(
-              {
-                error:
-                  typeof message.type !== "undefined" &&
-                  message.type === "ERROR",
-                success:
-                  typeof message.type !== "undefined" &&
-                  message.type === "SUCCESS",
-                info:
-                  typeof message.type === "undefined" ||
-                  (typeof message.type !== "undefined" &&
-                    message.type === "INFO"),
-              },
-              "bulkbar"
-            )}
-            onClick={() => setMessage({})}
-          >
-            <div className="txt">{message.message}</div>
-            <span className="absolute right-0">
-              <i className="ri-close-line mr-2" />
-            </span>
-          </div>
+          <Banner message={message.message} />
         )}
       </>
     </PocketBaseContext.Provider>
