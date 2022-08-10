@@ -2,15 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+.bg-primary {
+  @apply bg-slate-100;
+}
+
 html,
 body {
-  @apply bg-slate-100 font-sans text-sm min-h-screen relative leading-6 text-slate-700 p-0 m-0 min-w-full;
+  @apply bg-slate-100 font-sans text-sm min-h-screen relative leading-6 text-slate-700 p-0 m-0 min-w-full overflow-x-hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: none;
   -ms-touch-action: manipulation;
   touch-action: manipulation;
+
 }
 
 .page {
@@ -18,7 +23,7 @@ body {
 }
 
 .footer {
-  @apply bg-sky-500  text-slate-100 font-semibold tracking-wide;
+  @apply bg-transparent  text-slate-100 font-semibold tracking-wide;
 }
 
 .link-footer {
