@@ -296,7 +296,7 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
       session.profile.authdata.user
     );
 
-    // activitiesFetch(undefined, false);
+    activitiesFetch(undefined, false);
 
     return () => {
       client.AuthStore.clear();

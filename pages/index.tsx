@@ -22,9 +22,9 @@ const Home: NextPage = () => {
     activitiesHasMore,
   } = useContext(PocketBaseContext);
 
-  useEffect(() => {
-    activitiesFetch(undefined, false);
-  }, []);
+  // useEffect(() => {
+  //   activitiesFetch(undefined, false);
+  // }, []);
 
   return (
     <div
