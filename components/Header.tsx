@@ -78,6 +78,9 @@ function MobileNav(open: boolean, image?: string) {
           {theme === "dark" && (
             <SunIcon className="h-6 w-6" aria-hidden="true" />
           )}
+          {typeof theme === "undefined" && (
+            <MoonIcon className="h-6 w-6" aria-hidden="true" />
+          )}
         </button>
         {/* NOTIFICATION */}
         <Link href="/notifications">
