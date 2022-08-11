@@ -37,12 +37,13 @@ function SportspocketApp({
           />
         </Head>
         <SessionProvider session={pageProps.session} refetchInterval={5 * 60}>
-        <SnackbarProvider action={(key) => SnackbarCloseButtonAction({key})}>
-          <PocketBaseProvider>
-            <RealViewportProvider>
-              <div className="page">
-                <AuthGuard>
-                  
+          <SnackbarProvider
+            action={(key) => SnackbarCloseButtonAction({ key })}
+          >
+            <PocketBaseProvider>
+              <RealViewportProvider>
+                <div className="page">
+                  <AuthGuard>
                     <div className="main mb-12">
                       <>
                         <Header />
@@ -51,12 +52,11 @@ function SportspocketApp({
                         </main>
                       </>
                     </div>
-                  
-                </AuthGuard>
-                <Footer />
-              </div>
-            </RealViewportProvider>
-          </PocketBaseProvider>
+                  </AuthGuard>
+                  <Footer />
+                </div>
+              </RealViewportProvider>
+            </PocketBaseProvider>
           </SnackbarProvider>
         </SessionProvider>
       </ThemeProvider>

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.3.0",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@headlessui/react": "^1.6.6",
