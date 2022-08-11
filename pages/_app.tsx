@@ -10,6 +10,9 @@ import SignIn from "./signin";
 import { PocketBaseProvider } from "../lib/PocketBaseProvider";
 import { RealViewportProvider, ViewportHeightBox } from "next-real-viewport";
 import { ThemeProvider } from "next-themes";
+import { GetServerSideProps, GetStaticProps, NextApiRequest, NextApiResponse } from "next";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 /* eslint-disable */
 function SportspocketApp({
@@ -52,7 +55,9 @@ function SportspocketApp({
 /* eslint-enable */
 
 export function AuthGuard({ children }: { children: JSX.Element }) {
-  const { data: session } = useSession();
+  const { data: session } = useSession({
+    required: true,
+  });
   const isUser = !!session?.user;
 
   // useEffect(() => {
@@ -80,3 +85,11 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
 }
 
 export default SportspocketApp;
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  return {
+    props: {
+      session: await unstable_getServerSession(req, res, authOptions)
+    }
+  }
+}

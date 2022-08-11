@@ -65,6 +65,7 @@ function MobileNav(open: boolean, image?: string) {
         </Disclosure.Button>
       </div>
       <div className="relative z-10 pr-2 lg:p-0 ml-4 flex items-center">
+        <Link href={"/settings"}><a>Settings</a></Link>
         <button
           onClick={(e: React.MouseEvent) => {
             e.preventDefault();
