@@ -1,22 +1,14 @@
-import { Fragment, useEffect, useState } from "react";
+import { forwardRef, Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { MoonIcon, SearchIcon, SunIcon } from "@heroicons/react/solid";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 
 import { classNames } from "../utils/classes";
 
 import { useRouter } from "next/router";
-import { useSession, signOut, signIn } from "next-auth/react";
-import { Session } from "next-auth";
+import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
 const navigation = [
   {
     name: "Activities",
@@ -37,7 +29,6 @@ const navigation = [
     hover: "hover:before:bg-slate-500",
   },
 ];
-const userNavigation = [{ name: "Sign out", href: "#" }];
 
 function MobileNav(open: boolean, image?: string) {
   const [mounted, setMounted] = useState(false);
@@ -65,34 +56,74 @@ function MobileNav(open: boolean, image?: string) {
         </Disclosure.Button>
       </div>
       <div className="relative z-10 pr-2 lg:p-0 ml-4 flex items-center">
-        <Link href={"/settings"}><a>Settings</a></Link>
-        <button
-          onClick={(e: React.MouseEvent) => {
-            e.preventDefault();
-            setTheme(theme === "light" ? "dark" : "light");
-          }}
-          className="bg-slate-50 hover:bg-sky-500 flex-shrink-0 rounded-full p-1 text-slate-400 hover:text-sky-100 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-offset-white focus:ring-white"
-        >
-          {theme === "light" && (
-            <MoonIcon className="h-6 w-6" aria-hidden="true" />
-          )}
-          {theme === "dark" && (
-            <SunIcon className="h-6 w-6" aria-hidden="true" />
-          )}
-          {typeof theme === "undefined" && (
-            <MoonIcon className="h-6 w-6" aria-hidden="true" />
-          )}
-        </button>
-        {/* NOTIFICATION */}
-        <Link href="/notifications">
-          <a
+        {/* Container: Theme, Notifications */}
+        <div className="flex items-center justify-center  border-l border-slate-200 ml-6 pl-6 dark:border-slate-800">
+          <label className="sr-only" id="headlessui-listbox-label-2">
+            Theme
+          </label>
+          <button
             type="button"
-            className="ml-2 bg-slate-50 hover:bg-sky-500 flex-shrink-0 rounded-full p-1 text-slate-400 hover:text-sky-100 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-offset-white focus:ring-white"
+            onClick={(e: React.MouseEvent) => {
+              e.preventDefault();
+              setTheme(
+                theme === "light" || typeof theme === "undefined"
+                  ? "dark"
+                  : "light"
+              );
+            }}
           >
-            <span className="sr-only">View notifications</span>
-            <BellIcon className="h-6 w-6" aria-hidden="true" />
-          </a>
-        </Link>
+            <span className="dark:hidden">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-6 h-6"
+              >
+                <path
+                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                  className="fill-sky-400/20 stroke-sky-500"
+                />
+                <path
+                  d="M12 4v1M17.66 6.344l-.828.828M20.005 12.004h-1M17.66 17.664l-.828-.828M12 20.01V19M6.34 17.664l.835-.836M3.995 12.004h1.01M6 6l.835.836"
+                  className="stroke-sky-500"
+                />
+              </svg>
+            </span>
+            <span className="hidden dark:inline">
+              <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M17.715 15.15A6.5 6.5 0 0 1 9 6.035C6.106 6.922 4 9.645 4 12.867c0 3.94 3.153 7.136 7.042 7.136 3.101 0 5.734-2.032 6.673-4.853Z"
+                  className="fill-sky-400/20"
+                />
+                <path
+                  d="m17.715 15.15.95.316a1 1 0 0 0-1.445-1.185l.495.869ZM9 6.035l.846.534a1 1 0 0 0-1.14-1.49L9 6.035Zm8.221 8.246a5.47 5.47 0 0 1-2.72.718v2a7.47 7.47 0 0 0 3.71-.98l-.99-1.738Zm-2.72.718A5.5 5.5 0 0 1 9 9.5H7a7.5 7.5 0 0 0 7.5 7.5v-2ZM9 9.5c0-1.079.31-2.082.845-2.93L8.153 5.5A7.47 7.47 0 0 0 7 9.5h2Zm-4 3.368C5 10.089 6.815 7.75 9.292 6.99L8.706 5.08C5.397 6.094 3 9.201 3 12.867h2Zm6.042 6.136C7.718 19.003 5 16.268 5 12.867H3c0 4.48 3.588 8.136 8.042 8.136v-2Zm5.725-4.17c-.81 2.433-3.074 4.17-5.725 4.17v2c3.552 0 6.553-2.327 7.622-5.537l-1.897-.632Z"
+                  className="fill-sky-500"
+                />
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M17 3a1 1 0 0 1 1 1 2 2 0 0 0 2 2 1 1 0 1 1 0 2 2 2 0 0 0-2 2 1 1 0 1 1-2 0 2 2 0 0 0-2-2 1 1 0 1 1 0-2 2 2 0 0 0 2-2 1 1 0 0 1 1-1Z"
+                  className="fill-sky-500"
+                />
+              </svg>
+            </span>
+          </button>
+          {/* NOTIFICATION */}
+          <Link href="/notifications">
+            <a
+              type="button"
+              className="ml-6 block text-slate-400 hover:text-slate-500 dark:hover:text-slate-300"
+            >
+              <span className="sr-only">View Notifications</span>
+              <BellIcon className="w-5 h-5" />
+            </a>
+          </Link>
+        </div>
+
         {/* Profile dropdown */}
 
         <Menu as="div" className="flex-shrink-0 relative ml-4">
@@ -176,26 +207,11 @@ function MobileNav(open: boolean, image?: string) {
               <Menu.Item key={"signout"}>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="hover:bg-slate-100 block py-4 px-4 text-sm font-semibold text-gray-700 w-full text-left"
+                  className="hover:bg-slate-100 block py-4 px-4 font-semibold text-gray-700 w-full text-left"
                 >
                   Sign out
                 </button>
               </Menu.Item>
-              {/* {userNavigation.map((item) => (
-                  <Menu.Item key={item.name}>
-                    {({ active }) => (
-                      <button
-                        
-                        className={classNames(
-                          active ? "bg-gray-100" : "",
-                          "block py-2 px-4 text-sm text-gray-700 w-full text-left"
-                        )}
-                      >
-                        {item.name}
-                      </button>
-                    )}
-                  </Menu.Item>
-                ))} */}
             </Menu.Items>
           </Transition>
         </Menu>
@@ -204,6 +220,19 @@ function MobileNav(open: boolean, image?: string) {
   );
 }
 
+/* eslint-disable */
+const MyLink = forwardRef((props: any, ref) => {
+  let { href, children, ...rest } = props;
+  return (
+    <Link href={href}>
+      <a ref={ref} {...rest}>
+        {children}
+      </a>
+    </Link>
+  );
+});
+/* eslint-enable */
+
 export default function Header() {
   const router = useRouter();
   const { data: session } = useSession();
@@ -211,7 +240,7 @@ export default function Header() {
   return (
     <Disclosure
       as="header"
-      className="bg-slate-800 fixed z-50 top-0 left-0 right-0"
+      className="bg-slate-100 border-b-[1px] border-slate-300 dark:border-b-0 dark:bg-slate-800 fixed z-50 top-0 left-0 right-0"
     >
       {({ open }) => (
         <>
@@ -237,7 +266,7 @@ export default function Header() {
             <div className="header-nav">
               <div className="container relative h-16 flex items-center justify-between">
                 <nav
-                  className="hidden lg:py-4 lg:flex lg:space-x-8 font-semibold  text-slate-900"
+                  className="hidden lg:py-4 lg:flex lg:space-x-8 font-semibold text-slate-900"
                   aria-label="Global"
                 >
                   {navigation.map((item, i) => (
@@ -246,8 +275,8 @@ export default function Header() {
                         className={classNames(
                           router.pathname === item.href
                             ? `${item.before} italic`
-                            : `${item.hover} hover:italic`,
-                          "group before:-inset-1 before:-skew-y-3 before:block before:absolute px-2 relative inline-block"
+                            : `${item.hover} `,
+                          "hover:italic group before:-inset-1 before:-skew-y-3 before:block before:absolute px-2 relative inline-block"
                         )}
                         aria-current={
                           router.pathname === item.href ? "page" : undefined
@@ -278,66 +307,32 @@ export default function Header() {
           >
             <div className="pt-2 pb-3 px-2 space-y-1">
               {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  onClick={() => {
-                    router.push(`${item.href}`);
-                  }}
-                  href={item.href}
-                  className={classNames(
-                    router.pathname === item.href
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block rounded-none py-2 px-3 text-base font-medium"
-                  )}
-                  aria-current={
-                    router.pathname === item.href ? "page" : undefined
-                  }
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
-            </div>
-            <div className="border-t border-gray-700 pt-4 pb-3">
-              <div className="px-4 flex items-center">
-                <div className="flex-shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src={user.imageUrl}
-                    alt=""
-                  />
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-white">
-                    {user.name}
-                  </div>
-                  <div className="text-sm font-medium text-gray-400">
-                    {user.email}
-                  </div>
-                </div>
-
-                <Disclosure.Button
-                  href="/notifications"
-                  as="a"
-                  type="button"
-                  className="ml-auto flex-shrink-0 bg-gray-800 rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </Disclosure.Button>
-              </div>
-              <div className="mt-3 px-2 space-y-1">
-                {userNavigation.map((item) => (
+                <MyLink href={item.href} key={item.name}>
                   <Disclosure.Button
                     key={item.name}
-                    as="a"
-                    href={item.href}
-                    className="block rounded-none py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    className={classNames(
+                      router.pathname === item.href
+                        ? "bg-sky-500 dark:bg-slate-900 text-white"
+                        : "text-slate-600 dark:text-slate-300 hover:bg-gray-700 hover:text-white",
+                      "block rounded-none py-2 px-3 text-base font-medium w-full text-left"
+                    )}
+                    aria-current={
+                      router.pathname === item.href ? "page" : undefined
+                    }
                   >
                     {item.name}
                   </Disclosure.Button>
-                ))}
+                </MyLink>
+              ))}
+            </div>
+            <div className="dark:border-t border-gray-700 pt-4 pb-3">
+              <div className="mt-0 px-2 space-y-1">
+                <button
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="block rounded-none py-2 px-3 text-base font-medium dark:text-gray-400 hover:bg-gray-700 hover:text-white"
+                >
+                  Sign out
+                </button>
               </div>
             </div>
           </Disclosure.Panel>

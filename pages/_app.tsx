@@ -55,9 +55,7 @@ function SportspocketApp({
 /* eslint-enable */
 
 export function AuthGuard({ children }: { children: JSX.Element }) {
-  const { data: session } = useSession({
-    required: true,
-  });
+  const { data: session } = useSession();
   const isUser = !!session?.user;
 
   // useEffect(() => {
@@ -86,10 +84,10 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
 
 export default SportspocketApp;
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  return {
-    props: {
-      session: await unstable_getServerSession(req, res, authOptions)
-    }
-  }
-}
+// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+//   return {
+//     props: {
+//       session: await unstable_getServerSession(req, res, authOptions)
+//     }
+//   }
+// }

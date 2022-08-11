@@ -18,14 +18,13 @@
 
 html,
 body {
-  @apply bg-slate-100 font-sans text-sm relative leading-6 text-slate-700 p-0 m-0 min-w-full overflow-x-hidden;
+  @apply bg-slate-100 font-sans text-sm relative leading-6 text-slate-700 p-0 m-0 min-w-full;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: none;
   -ms-touch-action: manipulation;
   touch-action: manipulation;
-
 }
 
 .page {
