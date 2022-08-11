@@ -11,6 +11,7 @@ import { PocketBaseProvider } from "../lib/PocketBaseProvider";
 import { RealViewportProvider, ViewportHeightBox } from "next-real-viewport";
 import { ThemeProvider } from "next-themes";
 
+/* eslint-disable */
 function SportspocketApp({
   Component,
   pageProps: { session, ...pageProps },
@@ -49,6 +50,7 @@ function SportspocketApp({
     </>
   );
 }
+/* eslint-enable */
 
 export function AuthGuard({ children }: { children: JSX.Element }) {
   const { data: session } = useSession();
