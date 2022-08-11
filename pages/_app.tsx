@@ -46,12 +46,7 @@ function SportspocketApp({
 }
 
 export function AuthGuard({ children }: { children: JSX.Element }) {
-  const { data: session } = useSession({
-    required: true,
-    // onUnauthenticated() {
-    //   // The user is not authenticated, handle it here.
-    // },
-  });
+  const { data: session } = useSession();
   const isUser = !!session?.user;
 
   // useEffect(() => {
