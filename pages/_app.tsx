@@ -2,12 +2,14 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import Header from "./../components/Header";
-import Banner from "./../components/Banner";
+
 import Footer from "../components/Footer";
 
 import { SessionProvider, signIn, useSession } from "next-auth/react";
 import SignIn from "./signin";
 import { PocketBaseProvider } from "../lib/PocketBaseProvider";
+import { RealViewportProvider, ViewportHeightBox } from "next-real-viewport";
+import { ThemeProvider } from "next-themes";
 
 function SportspocketApp({
   Component,
@@ -15,32 +17,35 @@ function SportspocketApp({
 }: AppProps) {
   return (
     <>
-      <Head>
-        {/* maximum-scale 1 meta tag need to prevent ios input focus auto zooming */}
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1 maximum-scale=1"
-        />
-      </Head>
-      <SessionProvider session={pageProps.session} refetchInterval={5 * 60}>
-        <PocketBaseProvider>
-          <div className="page">
-            <AuthGuard>
-              <div className="main mb-12">
-                <>
-                  <Header />
-                  <main className="content container pt-16">
-                    <Component {...pageProps} />
-                  </main>
-                </>
-              </div>
-            </AuthGuard>
-            {/* <div className="bg-sky-500 h-12 relative bottom-0 -mb-4 shadow-sky-200 shadow origin-center rotate-1 scale-105 skew-x-0 skew-y-0 w-full min-w-min"></div> */}
+      <ThemeProvider>
+        <Head>
+          {/* maximum-scale 1 meta tag need to prevent ios input focus auto zooming */}
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1 maximum-scale=1"
+          />
+        </Head>
 
-            <Footer />
-          </div>
-        </PocketBaseProvider>
-      </SessionProvider>
+        <SessionProvider session={pageProps.session} refetchInterval={5 * 60}>
+          <PocketBaseProvider>
+            <RealViewportProvider>
+              <div className="page">
+                <AuthGuard>
+                  <div className="main mb-12">
+                    <>
+                      <Header />
+                      <main className="content container pt-16">
+                        <Component {...pageProps} />
+                      </main>
+                    </>
+                  </div>
+                </AuthGuard>
+                <Footer />
+              </div>
+            </RealViewportProvider>
+          </PocketBaseProvider>
+        </SessionProvider>
+      </ThemeProvider>
     </>
   );
 }

@@ -1,6 +1,6 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { SearchIcon } from "@heroicons/react/solid";
+import { MoonIcon, SearchIcon, SunIcon } from "@heroicons/react/solid";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 
@@ -9,6 +9,7 @@ import { classNames } from "../utils/classes";
 import { useRouter } from "next/router";
 import { useSession, signOut, signIn } from "next-auth/react";
 import { Session } from "next-auth";
+import { useTheme } from "next-themes";
 
 const user = {
   name: "Tom Cook",
@@ -38,7 +39,18 @@ const navigation = [
 ];
 const userNavigation = [{ name: "Sign out", href: "#" }];
 
-function mobileNav(open: boolean, image?: string) {
+function MobileNav(open: boolean, image?: string) {
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  // useEffect only runs on the client, so now we can safely show the UI
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
   return (
     <>
       <div className="lg:hidden relative z-10 flex items-center ">
@@ -53,11 +65,25 @@ function mobileNav(open: boolean, image?: string) {
         </Disclosure.Button>
       </div>
       <div className="relative z-10 pr-2 lg:p-0 ml-4 flex items-center">
+        <button
+          onClick={(e: React.MouseEvent) => {
+            e.preventDefault();
+            setTheme(theme === "light" ? "dark" : "light");
+          }}
+          className="bg-slate-50 hover:bg-sky-500 flex-shrink-0 rounded-full p-1 text-slate-400 hover:text-sky-100 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-offset-white focus:ring-white"
+        >
+          {theme === "light" && (
+            <MoonIcon className="h-6 w-6" aria-hidden="true" />
+          )}
+          {theme === "dark" && (
+            <SunIcon className="h-6 w-6" aria-hidden="true" />
+          )}
+        </button>
         {/* NOTIFICATION */}
         <Link href="/notifications">
           <a
             type="button"
-            className="bg-slate-50 hover:bg-sky-500 flex-shrink-0 rounded-full p-1 text-slate-400 hover:text-sky-100 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-offset-white focus:ring-white"
+            className="ml-2 bg-slate-50 hover:bg-sky-500 flex-shrink-0 rounded-full p-1 text-slate-400 hover:text-sky-100 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-offset-white focus:ring-white"
           >
             <span className="sr-only">View notifications</span>
             <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -146,7 +172,7 @@ function mobileNav(open: boolean, image?: string) {
               <Menu.Item key={"signout"}>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="hover:bg-slate-100 block py-2 px-4 text-sm text-gray-700 w-full text-left"
+                  className="hover:bg-slate-100 block py-4 px-4 text-sm font-semibold text-gray-700 w-full text-left"
                 >
                   Sign out
                 </button>
@@ -199,7 +225,7 @@ export default function Header() {
                       />
                     </div>
                   </div>
-                  {mobileNav(open, session)}
+                  {MobileNav(open, session)}
                 </div>
               </div>
             </div> */}
@@ -236,7 +262,7 @@ export default function Header() {
                   ))}
                 </nav>
 
-                {mobileNav(open, session!.user.image)}
+                {MobileNav(open, session!.user.image)}
               </div>
             </div>
           </div>
@@ -248,7 +274,6 @@ export default function Header() {
           >
             <div className="pt-2 pb-3 px-2 space-y-1">
               {navigation.map((item) => (
-                
                 <Disclosure.Button
                   key={item.name}
                   as="a"
@@ -268,7 +293,6 @@ export default function Header() {
                 >
                   {item.name}
                 </Disclosure.Button>
-                
               ))}
             </div>
             <div className="border-t border-gray-700 pt-4 pb-3">

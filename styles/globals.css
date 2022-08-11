@@ -6,13 +6,13 @@
   @apply bg-slate-100;
 }
 
-html,
+/* html,
       body,
       body > div:first-child,
       div#__next,
       div#__next > div {
         height: 100%;
-      }
+      } */
 
 
 
@@ -30,6 +30,7 @@ body {
 
 .page {
   @apply flex flex-col min-w-full;
+  height: calc(var(--vh) * 100);
 }
 
 .footer {
