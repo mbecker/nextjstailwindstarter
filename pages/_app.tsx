@@ -9,7 +9,10 @@ import { SessionProvider, signIn, useSession } from "next-auth/react";
 import SignIn from "./signin";
 import { PocketBaseProvider } from "../lib/PocketBaseProvider";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function SportspocketApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
     <>
       <Head>
@@ -43,7 +46,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 export function AuthGuard({ children }: { children: JSX.Element }) {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession({
+    required: true,
+    // onUnauthenticated() {
+    //   // The user is not authenticated, handle it here.
+    // },
+  });
   const isUser = !!session?.user;
 
   // useEffect(() => {
@@ -70,4 +78,4 @@ export function AuthGuard({ children }: { children: JSX.Element }) {
   );
 }
 
-export default MyApp;
+export default SportspocketApp;
