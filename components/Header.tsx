@@ -248,9 +248,13 @@ export default function Header() {
           >
             <div className="pt-2 pb-3 px-2 space-y-1">
               {navigation.map((item) => (
+                
                 <Disclosure.Button
                   key={item.name}
                   as="a"
+                  onClick={() => {
+                    router.push(`${item.href}`);
+                  }}
                   href={item.href}
                   className={classNames(
                     router.pathname === item.href
@@ -264,6 +268,7 @@ export default function Header() {
                 >
                   {item.name}
                 </Disclosure.Button>
+                
               ))}
             </div>
             <div className="border-t border-gray-700 pt-4 pb-3">
