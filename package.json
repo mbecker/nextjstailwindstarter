@@ -16,7 +16,7 @@
     "lodash": "^4.17.21",
     "next": "12.2.4",
     "next-auth": "^4.10.3",
-    "next-real-viewport": "^0.7.1",
+    "next-real-viewport": "github:basementstudio/next-real-viewport#28327d59aa2b09286b86ddf9cafb67d010508da8",
     "next-themes": "^0.2.0",
     "pocketbase": "^0.3.1",
     "react": "18.2.0",

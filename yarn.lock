@@ -1439,9 +1439,9 @@
     "preact-render-to-string" "^5.1.19"
     "uuid" "^8.3.2"
 
-"next-real-viewport@^0.7.1":
-  "integrity" "sha512-2SIuOORhqrV00MpkjPQk/z3h/eRCHnYlJV6srn+aaPEM3k6e+hpc8jkmJWsmgP2rncrcOrxLzL/FearfAgAMfQ=="
-  "resolved" "https://registry.npmjs.org/next-real-viewport/-/next-real-viewport-0.7.1.tgz"
+"next-real-viewport@github:basementstudio/next-real-viewport#28327d59aa2b09286b86ddf9cafb67d010508da8":
+  "integrity" "sha512-UY6bgiEnte6EQChnB78QgHvS30xJ+NtpBjsz24ASe5U31b+95STvgvXBezhL3xRq6QwFbd3lGX0LjoPTSpsIyg=="
+  "resolved" "git+ssh://git@github.com/basementstudio/next-real-viewport.git#28327d59aa2b09286b86ddf9cafb67d010508da8"
   "version" "0.7.1"
 
 "next-themes@^0.2.0":

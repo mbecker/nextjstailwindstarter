@@ -26,7 +26,6 @@ function SportspocketApp({
             content="width=device-width, initial-scale=1 maximum-scale=1"
           />
         </Head>
-
         <SessionProvider session={pageProps.session} refetchInterval={5 * 60}>
           <PocketBaseProvider>
             <RealViewportProvider>
