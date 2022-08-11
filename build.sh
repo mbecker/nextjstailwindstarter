@@ -1,1 +1,1 @@
-git pull origin main && npm run build && pm2 restart next
+git pull origin main && npm install && npm run build && pm2 restart next
