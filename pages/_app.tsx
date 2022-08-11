@@ -10,9 +10,15 @@ import SignIn from "./signin";
 import { PocketBaseProvider } from "../lib/PocketBaseProvider";
 import { RealViewportProvider, ViewportHeightBox } from "next-real-viewport";
 import { ThemeProvider } from "next-themes";
-import { GetServerSideProps, GetStaticProps, NextApiRequest, NextApiResponse } from "next";
+import {
+  GetServerSideProps,
+  GetStaticProps,
+  NextApiRequest,
+  NextApiResponse,
+} from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { SnackbarProvider } from "notistack";
 
 /* eslint-disable */
 function SportspocketApp({
@@ -30,23 +36,27 @@ function SportspocketApp({
           />
         </Head>
         <SessionProvider session={pageProps.session} refetchInterval={5 * 60}>
+        <SnackbarProvider>
           <PocketBaseProvider>
             <RealViewportProvider>
               <div className="page">
                 <AuthGuard>
-                  <div className="main mb-12">
-                    <>
-                      <Header />
-                      <main className="content container pt-16">
-                        <Component {...pageProps} />
-                      </main>
-                    </>
-                  </div>
+                  
+                    <div className="main mb-12">
+                      <>
+                        <Header />
+                        <main className="content container pt-16">
+                          <Component {...pageProps} />
+                        </main>
+                      </>
+                    </div>
+                  
                 </AuthGuard>
                 <Footer />
               </div>
             </RealViewportProvider>
           </PocketBaseProvider>
+          </SnackbarProvider>
         </SessionProvider>
       </ThemeProvider>
     </>

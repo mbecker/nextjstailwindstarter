@@ -1,6 +1,6 @@
-import classNames from "classnames";
-import { orderBy, replace, sortBy, unionBy } from "lodash";
+import { orderBy, unionBy } from "lodash";
 import { useSession } from "next-auth/react";
+import { useSnackbar } from "notistack";
 import PocketBase, { Admin, LocalAuthStore, User } from "pocketbase";
 
 class AppAuthStore extends LocalAuthStore {
@@ -43,7 +43,7 @@ export const BEFORE: BEFORE = "before";
 
 export interface PocketBaseContext {
   pocketBaseClient: PocketBase;
-  setMessage: Dispatch<SetStateAction<MessageInterface>>;
+  // setMessage: Dispatch<SetStateAction<MessageInterface>>;
   activities: Activities;
   // activitesTotal: number;
   // activitesPage: number;
@@ -63,7 +63,7 @@ export interface PocketBaseContext {
 
 export const PocketBaseContext = createContext<PocketBaseContext>({
   pocketBaseClient: client,
-  setMessage: () => {},
+  // setMessage: () => {},
   activities: [],
   // activitesTotal: 0,
   // activitesPage: 0,
@@ -82,8 +82,7 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
   // Initialize PocketBase client with session props
 
   const { data: session } = useSession();
-
-  const [message, setMessage] = useState<MessageInterface>({});
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [activities, setActivities] = useState<Activities>([]);
   const [activitiesHasMore, setActivitiesHasMore] = useState<boolean>(true);
@@ -167,17 +166,26 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
         );
         const newItemsLength = activities.length - newItems.length;
         if (typeof showToast === "undefined" || showToast === true) {
-          setMessage({
-            message:
-              newItemsLength === 0
-                ? typeof beforeAfter !== "undefined" && beforeAfter === "after"
-                  ? `No new items from Strava`
-                  : `No items`
-                : `Requested ${
-                    -newItemsLength > 0 ? -newItemsLength : newItemsLength
-                  } items`,
-            type: newItemsLength === 0 ? "ERROR" : "SUCCESS",
-          });
+          // setMessage({
+          //   message:
+          //     newItemsLength === 0
+          //       ? typeof beforeAfter !== "undefined" && beforeAfter === "after"
+          //         ? `No new items from Strava`
+          //         : `No items`
+          //       : `Requested ${
+          //           -newItemsLength > 0 ? -newItemsLength : newItemsLength
+          //         } items`,
+          //   type: newItemsLength === 0 ? "ERROR" : "SUCCESS",
+          // });
+          enqueueSnackbar(
+            newItemsLength === 0
+              ? typeof beforeAfter !== "undefined" && beforeAfter === "after"
+                ? `No new items from Strava`
+                : `No items`
+              : `Requested ${
+                  -newItemsLength > 0 ? -newItemsLength : newItemsLength
+                } items`
+          );
         }
         setActivities(newItems);
         console.log("=== PocketBaseProvider: result.items=", result);
@@ -203,10 +211,11 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
   const activitiesFetchForce = useCallback(
     async (date?: string, beforeAfter?: BEFORE | AFTER) => {
       setActivitesLoading(true);
-      setMessage({
-        message: "Requesting items",
-        type: "INFO",
-      });
+      // setMessage({
+      //   message: "Requesting items",
+      //   type: "INFO",
+      // });
+      enqueueSnackbar("Requesting items");
       let reqConfig: any = { method: "post" };
       if (typeof date !== "undefined" && typeof beforeAfter !== "undefined") {
         const dt = Math.floor(new Date(date).getTime() / 1000);
@@ -249,26 +258,14 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
         console.log(JSON.stringify(err, undefined, 2));
         if (typeof err["status"] !== "undefined") {
           if (err.status === 401) {
-            setMessage({
-              message: "Authorization Error. Please sign in again (401)",
-              type: "ERROR",
-            });
+            enqueueSnackbar("Authorization Error. Please sign in again (401)");
           } else if (err.status === 404) {
-            setMessage({
-              message: `API not found (404)`,
-              type: "ERROR",
-            });
+            enqueueSnackbar(`API not found (404)`);
           } else {
-            setMessage({
-              message: `API Error: ${err.data.code}`,
-              type: "ERROR",
-            });
+            enqueueSnackbar(`API Error: ${err.data.code}`);
           }
         } else {
-          setMessage({
-            message: "Requesting items - " + err,
-            type: "ERROR",
-          });
+          enqueueSnackbar("Requesting items - " + err);
         }
         setActivitesLoading(false);
       }
@@ -307,7 +304,7 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
     <PocketBaseContext.Provider
       value={{
         pocketBaseClient: client,
-        setMessage: setMessage,
+        // setMessage: setMessage,
         activities: activities,
         // activitesTotal: activitesTotal,
         // activitesPage: activitesPage,
@@ -317,12 +314,7 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
         activitiesHasMore: activitiesHasMore,
       }}
     >
-      <>
-        {children}
-        {typeof message.message !== "undefined" && (
-          <Banner message={message.message} />
-        )}
-      </>
+      <>{children}</>
     </PocketBaseContext.Provider>
   );
 };

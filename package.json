@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
     "classnames": "^2.3.1",
@@ -18,6 +20,7 @@
     "next-auth": "^4.10.3",
     "next-real-viewport": "github:basementstudio/next-real-viewport#28327d59aa2b09286b86ddf9cafb67d010508da8",
     "next-themes": "^0.2.0",
+    "notistack": "^2.0.5",
     "pocketbase": "^0.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
