@@ -215,7 +215,7 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
       //   message: "Requesting items",
       //   type: "INFO",
       // });
-      enqueueSnackbar("Requesting items");
+      enqueueSnackbar("Requesting Strava activities");
       let reqConfig: any = { method: "post" };
       if (typeof date !== "undefined" && typeof beforeAfter !== "undefined") {
         const dt = Math.floor(new Date(date).getTime() / 1000);
@@ -265,12 +265,12 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
             enqueueSnackbar(`API Error: ${err.data.code}`);
           }
         } else {
-          enqueueSnackbar("Requesting items - " + err);
+          enqueueSnackbar("Requesting Strava activities - " + err);
         }
         setActivitesLoading(false);
       }
     },
-    [activitiesFetch]
+    [activitiesFetch, enqueueSnackbar]
   );
 
   useEffect(() => {

@@ -236,7 +236,6 @@ const MyLink = forwardRef((props: any, ref) => {
 export default function Header() {
   const router = useRouter();
   const { data: session } = useSession();
-  console.log(session);
   return (
     <Disclosure
       as="header"

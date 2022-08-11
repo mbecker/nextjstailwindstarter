@@ -37,10 +37,9 @@ const Home: NextPage = () => {
           >
             <span className="relative text-white">Activities</span>
           </h1>
-          {/* <p className="hidden mt-4 text-sm text-slate-600">
-            A list of all the users in your account including their name, title,
-            email and role.
-          </p> */}
+          <p className="mt-4 text-sm text-slate-600">
+            Activities length: {activities.length}
+          </p>
         </div>
         <div className="flex space-x-1 mt-0">
           {!activitesLoading && (
@@ -53,7 +52,7 @@ const Home: NextPage = () => {
                     activities.length > 0
                       ? activities[activities.length - 1].start_date
                       : undefined;
-                  activitiesFetchForce(dt, "before");
+                  activitiesFetchForce(dt, "after");
                 }}
               >
                 Refresh<span className="ml-1 hidden sm:block">Strava</span>

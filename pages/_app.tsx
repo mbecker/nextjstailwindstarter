@@ -19,6 +19,7 @@ import {
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { SnackbarProvider } from "notistack";
+import SnackbarCloseButtonAction from "../components/SnackbarCloseButtonAction";
 
 /* eslint-disable */
 function SportspocketApp({
@@ -36,7 +37,7 @@ function SportspocketApp({
           />
         </Head>
         <SessionProvider session={pageProps.session} refetchInterval={5 * 60}>
-        <SnackbarProvider>
+        <SnackbarProvider action={(key) => SnackbarCloseButtonAction({key})}>
           <PocketBaseProvider>
             <RealViewportProvider>
               <div className="page">
