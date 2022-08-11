@@ -45,14 +45,27 @@ const Home: NextPage = () => {
         <div className="flex space-x-1 mt-0">
           {!activitesLoading && (
             <>
-              <button className="btn-main inline-flex justify-center">
+              <button
+                className="btn-main inline-flex justify-center"
+                onClick={(e: React.MouseEvent) => {
+                  e.preventDefault();
+                  const dt =
+                    activities.length > 0
+                      ? activities[activities.length - 1].start_date
+                      : undefined;
+                  activitiesFetchForce(dt, "before");
+                }}
+              >
                 Refresh<span className="ml-1 hidden sm:block">Strava</span>
                 <RefreshIcon className="ml-2 -mr-1 h-5 w-5 text-slate-100" />
               </button>
-              <button onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-                activitiesFetch();
-              }} className="btn-main inline-flex justify-center">
+              <button
+                onClick={(e: React.MouseEvent) => {
+                  e.preventDefault();
+                  activitiesFetch();
+                }}
+                className="btn-main inline-flex justify-center"
+              >
                 More<span className="ml-1 hidden sm:block">Activities</span>
               </button>
             </>
