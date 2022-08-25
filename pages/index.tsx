@@ -9,8 +9,8 @@ import {
   SortAscendingIcon,
   SortDescendingIcon,
 } from "@heroicons/react/solid";
-import { useContext, useEffect, useState } from "react";
-import { AFTER, PocketBaseContext } from "../lib/PocketBaseProvider";
+import { useContext, useEffect, useRef, useState } from "react";
+import { AFTER, BEFORE, PocketBaseContext } from "../lib/PocketBaseProvider";
 import { Activities, Activity } from "../common/Strava";
 import {
   ColumnDef,
@@ -93,6 +93,8 @@ const Home: NextPage = () => {
   //   }
   // }, []);
 
+  const tableRef = useRef<HTMLInputElement>(null);
+
   /**
    * REACT TABLE
    */
@@ -103,9 +105,9 @@ const Home: NextPage = () => {
 
   const isFilterActive = sorting.length > 0 || showOnlyWithMap;
   const setFilter = () => {
-    if(showOnlyWithMap) setShowOnlyWithMap(false);
+    if (showOnlyWithMap) setShowOnlyWithMap(false);
     if (sorting.length > 0) setSorting([]);
-  }
+  };
 
   useEffect(() => {
     const l = activities.filter((item) => {
@@ -132,7 +134,6 @@ const Home: NextPage = () => {
       },
     },
   });
-
 
   const recordsInfoText = () => {
     let recordsInfoText = "";
@@ -161,8 +162,8 @@ const Home: NextPage = () => {
       <div className="block text-right m-t-sm mb-2 text-sm">
         {table.getSortedRowModel().rows.length !== 0 && (
           <>
-            <span>Showing items</span>
-            <span className="ml-2">{recordsInfoText}</span>
+            <span>Showing</span>
+            <span className="ml-1">{recordsInfoText}</span>
           </>
         )}
       </div>
@@ -171,6 +172,7 @@ const Home: NextPage = () => {
 
   return (
     <div
+      ref={tableRef}
       className={`overflow-hidden shadow ring-1 ring-slate-200 ring-opacity-5 md:rounded-sm bg-white border-t-2 border-solid ${pageColor.border}`}
     >
       <div className="flex flex-col md:flex-row space-y-6 items-start pt-4 px-4">
@@ -269,12 +271,16 @@ const Home: NextPage = () => {
       </div>
       {/* SHOW FILTER */}
       <div className="flex w-full mt-2 px-4 justify-end">
-          <button className="btn-filter" disabled={!isFilterActive} onClick={(e: React.MouseEvent) => {
+        <button
+          className="btn-filter"
+          disabled={!isFilterActive}
+          onClick={(e: React.MouseEvent) => {
             e.preventDefault();
             setFilter();
-          }}>
-            Clear filter
-          </button>
+          }}
+        >
+          Clear filter
+        </button>
       </div>
       {/* TABLE START */}
       <div className="mt-0">
@@ -445,29 +451,113 @@ const Home: NextPage = () => {
           </div>
         </div>
         {/* Table Footer */}
-        <div className="my-4 w-full flex items-center justify-center">
+        <div className="my-4 w-full flex flex-col items-center justify-center">
           <span className="relative z-0 inline-flex shadow-sm rounded-md">
             <button
+              onClick={() => {
+                if (tableRef.current) {
+                  tableRef.current.scrollIntoView();
+                }
+                table.setPageIndex(0);
+              }}
+              disabled={!table.getCanPreviousPage()}
               type="button"
-              className="relative inline-flex items-center px-2 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-sky-400 focus:border-sky-400"
+              className="disabled:bg-slate-50 relative inline-flex items-center px-2 py-2 mr-2 border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-sky-400 focus:border-sky-400"
             >
               <span className="sr-only">Previous</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
             <button
+              onClick={() => {
+                if (tableRef.current) {
+                  tableRef.current.scrollIntoView();
+                }
+                table.previousPage();
+              }}
+              disabled={!table.getCanPreviousPage()}
               type="button"
-              className="-ml-px relative inline-flex items-center px-2 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-sky-400 focus:border-sky-400"
+              className="disabled:bg-slate-50 relative inline-flex items-center px-2 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-sky-400 focus:border-sky-400"
+            >
+              <span className="sr-only">Previous</span>
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <button
+              onClick={() => {
+                if (tableRef.current) {
+                  tableRef.current.scrollIntoView();
+                }
+                table.nextPage();
+              }}
+              disabled={!table.getCanNextPage()}
+              type="button"
+              className="disabled:bg-slate-50 -ml-px relative inline-flex items-center px-2 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-sky-400 focus:border-sky-400"
+            >
+              <span className="sr-only">Next</span>
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+
+            <button
+              onClick={() => {
+                if (tableRef.current) {
+                  tableRef.current.scrollIntoView();
+                }
+                table.setPageIndex(table.getPageCount() - 1);
+              }}
+              disabled={!table.getCanNextPage()}
+              type="button"
+              className="disabled:bg-slate-50 relative inline-flex items-center px-2 py-2 ml-2 border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-sky-400 focus:border-sky-400"
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
             </button>
           </span>
+          <div>
+            <span className="flex items-center gap-1 text-xs mt-2">
+              <div>Page</div>
+              <strong>
+                {table.getState().pagination.pageIndex + 1} of{" "}
+                {table.getPageCount()}
+              </strong>
+            </span>
+
+            <select
+              className="hidden"
+              value={table.getState().pagination.pageSize}
+              onChange={(e) => {
+                table.setPageSize(Number(e.target.value));
+              }}
+            >
+              {[10, 20, 30, 40, 50].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  Show {pageSize}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button
+            className="btn-main mt-2"
+            disabled={activities.length === 0}
+            onClick={(e: React.MouseEvent) => {
+              e.preventDefault();
+              if (activities.length === 0) return;
+              const dt = activities[activities.length - 1].start_date_local;
+              activitiesFetch(dt, true, BEFORE, undefined);
+            }}
+          >
+            Load older activities
+          </button>
         </div>
       </div>
+      {/* TABLE END */}
+
+      <div className="flex w-full mt-2 px-4 justify-end">
+        <span className="text-xs">{recordsInfoText()}</span>
+      </div>
+
       <div>
-      <p className="mt-4 text-sm text-slate-600">
-            Activities length: {activities.length}
-          </p>
+        <p className="mt-4 text-sm text-slate-600">
+          Activities length: {activities.length}
+        </p>
       </div>
     </div>
   );

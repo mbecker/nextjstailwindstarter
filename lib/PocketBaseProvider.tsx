@@ -31,6 +31,7 @@ import React, {
   SetStateAction,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { Activities, Activity } from "../common/Strava";
@@ -108,7 +109,10 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
         filter: "",
       };
       if (typeof date !== "undefined") {
-        date = date.replace("T", " ").replace("Z", "");
+        // Create a Date-object to set the offset manually
+        const ndate = new Date(date);
+        var utc = new Date(ndate.getTime() + ndate.getTimezoneOffset() * 60000);
+        date = `${utc.toISOString()}`.replace("T", " ").replace("Z", "");
         // beforeAfter(BEFORE) is default
         queryParams = { ...queryParams, filter: `start_date < "${date}"` };
         if (beforeAfter === AFTER) {
@@ -142,10 +146,16 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
           20,
           queryParams
         );
-        console.log(
-          "=== PocketBaseProvider: Request items length=",
-          result.totalItems
-        );
+        // console.log("=== PocketBaseProvider: result=", result);
+        // console.log(
+        //   "=== PocketBaseProvider: result totalitems length=",
+        //   result.totalItems
+        // );
+        // console.log(
+        //   "=== PocketBaseProvider: result items length=",
+        //   result.items.length
+        // );
+        // console.log("=== PocketBaseProvider: activities=", activities)
 
         // setActivitesTotal(result.totalItems);
         let newActivites: Activities = [];
@@ -155,10 +165,11 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
             newActivites.push(ac);
           }
         });
-        console.log(
-          "=== PocketBaseProvider: Request activities length=",
-          newActivites.length
-        );
+        // console.log(
+        //   "=== PocketBaseProvider: Request new activities length=",
+        //   newActivites.length
+        // );
+        // console.log("=== PocketBaseProvider: newActivities=", newActivites)
         const newItems = orderBy(
           unionBy(activities, newActivites, "id"),
           "id",
@@ -188,7 +199,7 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
           );
         }
         setActivities(newItems);
-        console.log("=== PocketBaseProvider: result.items=", result);
+        
 
         // The reuest is 'force' (Strava was requested before): The page.items may be 0 (or any number) because no new Strava activities are uploaded
         if (typeof beforeAfter !== "undefined" && beforeAfter === BEFORE) {
