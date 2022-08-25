@@ -1,25 +1,5 @@
 import { Activities } from "../common/Strava";
 
-/* This example requires Tailwind CSS v2.0+ */
-const people = [
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  // More people...
-];
-
-for (let index = 0; index < 4; index++) {
-  people.push({
-    name: "Lindsay Walton2" + index,
-    title: "Front-end Developer" + index,
-    email: "lindsay.walton2@example.com" + index,
-    role: "Member",
-  });
-}
-
 type Props = {
   activities: Activities;
 };

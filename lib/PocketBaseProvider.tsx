@@ -1,5 +1,5 @@
 import { orderBy, unionBy } from "lodash";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useSnackbar } from "notistack";
 import PocketBase, { Admin, LocalAuthStore, User } from "pocketbase";
 
@@ -200,8 +200,17 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
             result.items.length !== 0 && result.items.length === 20
           );
         }
-      } catch (err) {
-        console.log("=== PocketBaseProvider: Error requesting items err=", err);
+      } catch (err: any) {
+        console.error(
+          "=== PocketBaseProvider: Error requesting items err=",
+          err
+        );
+        if (typeof err["status"] !== "undefined") {
+          if (err.status === 401) {
+            signOut();
+            enqueueSnackbar("Authorization Error. Please sign in again (401)");
+          }
+        }
       }
       setActivitesLoading(false);
     },
@@ -255,9 +264,10 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
         // });
         setActivitesLoading(false);
       } catch (err: any) {
-        console.log(JSON.stringify(err, undefined, 2));
+        console.warn(JSON.stringify(err, undefined, 2));
         if (typeof err["status"] !== "undefined") {
           if (err.status === 401) {
+            signOut();
             enqueueSnackbar("Authorization Error. Please sign in again (401)");
           } else if (err.status === 404) {
             enqueueSnackbar(`API not found (404)`);

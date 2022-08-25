@@ -101,6 +101,12 @@ const Home: NextPage = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rows, setRows] = useState<Activities>([]);
 
+  const isFilterActive = sorting.length > 0 || showOnlyWithMap;
+  const setFilter = () => {
+    if(showOnlyWithMap) setShowOnlyWithMap(false);
+    if (sorting.length > 0) setSorting([]);
+  }
+
   useEffect(() => {
     const l = activities.filter((item) => {
       if (!showOnlyWithMap) return item;
@@ -126,6 +132,7 @@ const Home: NextPage = () => {
       },
     },
   });
+
 
   const recordsInfoText = () => {
     let recordsInfoText = "";
@@ -173,9 +180,6 @@ const Home: NextPage = () => {
           >
             <span className="relative text-white">Activities</span>
           </h1>
-          <p className="mt-4 text-sm text-slate-600">
-            Activities length: {activities.length}
-          </p>
         </div>
         <div className="flex space-x-1 mt-0">
           {!activitesLoading && (
@@ -186,7 +190,7 @@ const Home: NextPage = () => {
                   e.preventDefault();
                   const dt =
                     activities.length > 0
-                      ? activities[activities.length - 1].start_date
+                      ? activities[0].start_date
                       : undefined;
                   activitiesFetchForce(dt, "after");
                 }}
@@ -194,7 +198,7 @@ const Home: NextPage = () => {
                 Refresh<span className="ml-1 hidden sm:block">Strava</span>
                 <RefreshIcon className="ml-2 -mr-1 h-5 w-5 text-slate-100" />
               </button>
-              <button
+              {/* <button
                 onClick={async (e: React.MouseEvent) => {
                   e.preventDefault();
                   // await fetchNewItems();
@@ -213,7 +217,7 @@ const Home: NextPage = () => {
                 className="btn-main inline-flex justify-center"
               >
                 More<span className="ml-1 hidden sm:block">Activities</span>
-              </button>
+              </button> */}
               <button
                 type="button"
                 className="btn-main inline-flex justify-center"
@@ -263,9 +267,19 @@ const Home: NextPage = () => {
           )}
         </div>
       </div>
+      {/* SHOW FILTER */}
+      <div className="flex w-full mt-2 px-4 justify-end">
+          <button className="btn-filter" disabled={!isFilterActive} onClick={(e: React.MouseEvent) => {
+            e.preventDefault();
+            setFilter();
+          }}>
+            Clear filter
+          </button>
+      </div>
+      {/* TABLE START */}
       <div className="mt-0">
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="mt-8 flex flex-col">
+          <div className="mt-2 flex flex-col">
             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle">
                 <div className="overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5">
@@ -308,27 +322,30 @@ const Home: NextPage = () => {
                                         "text-sky-500":
                                           header.column.getIsSorted() ===
                                           "desc",
-                                      }, {
-                                        "text-sky-500": header.id === "polyline" && showOnlyWithMap
+                                      },
+                                      {
+                                        "text-sky-500":
+                                          header.id === "polyline" &&
+                                          showOnlyWithMap,
                                       }
                                     )}
                                   >
-                                    {(header.id !== "polyline" && header.column.getIsSorted()) === "desc" && (
+                                    {(header.id !== "polyline" &&
+                                      header.column.getIsSorted()) ===
+                                      "desc" && (
                                       <SortDescendingIcon className="w-4 h-4" />
                                     )}
-                                    {(header.id !== "polyline" && header.column.getIsSorted() === "asc") && (
-                                      <SortAscendingIcon className="w-4 h-4" />
-                                    )}
-                                    {
-                                      header.id !== "polyline" && !(header.column.getIsSorted()) && (
+                                    {header.id !== "polyline" &&
+                                      header.column.getIsSorted() === "asc" && (
                                         <SortAscendingIcon className="w-4 h-4" />
-                                      )
-                                    }
-                                    {
-                                      (header.id === "polyline") && (
-                                        <CheckIcon className="w-4 h-4" />
-                                      )
-                                    }
+                                      )}
+                                    {header.id !== "polyline" &&
+                                      !header.column.getIsSorted() && (
+                                        <SortAscendingIcon className="w-4 h-4" />
+                                      )}
+                                    {header.id === "polyline" && (
+                                      <CheckIcon className="w-4 h-4" />
+                                    )}
 
                                     <span className="capitalize cursor-pointer ml-1">
                                       {flexRender(
@@ -446,6 +463,11 @@ const Home: NextPage = () => {
             </button>
           </span>
         </div>
+      </div>
+      <div>
+      <p className="mt-4 text-sm text-slate-600">
+            Activities length: {activities.length}
+          </p>
       </div>
     </div>
   );
