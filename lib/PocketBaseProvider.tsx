@@ -97,7 +97,7 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
       id?: string | number | undefined
     ) => {
       console.log(
-        "=== PocketBaseProvider - activitiesFect: ",
+        "=== PocketBaseProvider - activitiesFetch: ",
         date,
         showToast,
         beforeAfter,
