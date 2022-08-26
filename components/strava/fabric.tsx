@@ -143,7 +143,7 @@ const Fabric = ({ activity }: Props) => {
     console.log("Client Width: ", containerRef.current.clientWidth);
 
     console.log("Client Height: ", canvas.current.getHeight());
-
+    
     console.log("witdhx=" + widthX + ",heightx=" + heightX);
     canvas.current.setDimensions(
       { width: widthX, height: heightX },
@@ -152,6 +152,7 @@ const Fabric = ({ activity }: Props) => {
     const scale          = widthX / canvas.current.getWidth();
     
     canvas.current.setZoom(scale);
+    console.log("Zoom: ", scale)
 
 
 
@@ -171,8 +172,6 @@ const Fabric = ({ activity }: Props) => {
         img,
         canvas.current.renderAll.bind(canvas.current), {
           crossOrigin: 'anonymous',
-          width: widthX,
-          height: heightX,
         }
 
       );
