@@ -1,7 +1,6 @@
 import React, { createRef, useCallback, useEffect, useRef } from "react";
 
 import { fabric } from "fabric";
-import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
 import { Activity } from "../../common/Strava";
 import { Transform } from "fabric/fabric-impl";
 
