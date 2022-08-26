@@ -98,20 +98,29 @@ const Fabric = ({ activity }: Props) => {
     //   { width: widthXTmp, height: heightXTmp },
     //   { cssOnly: false }
     // );
-    // canvas.current.setWidth(widthXTmp);
-    // canvas.current.setHeight(heightXTmp)
-    canvas.current.setDimensions(
-      { width: widthXTmp, height: heightXTmp },
-      { cssOnly: false }
-    );
-    // mapImage.current!.set({
-    //   // width: containerRef.current.clientWidth,
-    //   // height: containerRef.current.clientHeight,
-    //   originX: "left",
-    //   originY: "top",
-    //   scaleX: scaleXTmp,
-    //   scaleY: heightXTmp / 600,
-    // });
+    canvas.current.setWidth(widthXTmp);
+    canvas.current.setHeight(heightXTmp)
+    // canvas.current.setDimensions(
+    //   { width: widthXTmp, height: heightXTmp },
+    //   { cssOnly: false }
+    // );
+
+    // const ratio = 800 / 600;
+    // const containerWidth = containerRef.current.clientWidth;
+    // const scale          = containerWidth / canvas.current.getWidth();
+    // const zoom           = canvas.current.getZoom() * scale;
+
+    // canvas.current.setDimensions({width: containerWidth, height: containerWidth / ratio});
+    // canvas.current.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+
+    mapImage.current!.set({
+      // width: containerRef.current.clientWidth,
+      // height: containerRef.current.clientHeight,
+      originX: "left",
+      originY: "top",
+      scaleX: scaleXTmp,
+      scaleY: heightXTmp / 600,
+    });
     // console.log(mapImage.current);
     // canvas.current.scaleToWidth(widthXTmp);
     canvas.current.renderAll();
@@ -183,13 +192,16 @@ const Fabric = ({ activity }: Props) => {
   return (
     <div
       className="flex flex-col justify-start items-center w-full my-2"
-      ref={containerRef}
+      
     >
       {/* <div className="flex flex-row space-x-1">
         <button onClick={onAddCircle}>Add circle</button>
         <button onClick={onAddRectangle}>Add Rectangle</button>
       </div> */}
-      <canvas ref={fabricRef} className="w-full" />
+      <div className="w-full text-center justify-center items-center" ref={containerRef}>
+      <canvas ref={fabricRef} className="w-full h-full" />
+      </div>
+      
       {/* <FabricJSCanvas className="w-[800px] h-[600px]" onReady={onReady} /> */}
     </div>
   );
