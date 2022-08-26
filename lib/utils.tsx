@@ -4,3 +4,24 @@ export function dbDate(dt: string | Date): string {
   }
   return dt.toISOString().slice(0, 19).replace("T", " ");
 }
+
+const options: Intl.DateTimeFormatOptions = {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+};
+
+export function normalizeDate(dt: any): string {
+  return new Date(dt).toLocaleDateString(undefined, options);
+}
+
+export function normalizeMovingTime(dt: any): string {
+  return `${new Date((dt as number) * 1000).toISOString().substring(11, 16)}h`;
+}
+
+export function normalizeDistance(n: any): string {
+  return `${((n as number) / 1000).toFixed(2)}km`
+}

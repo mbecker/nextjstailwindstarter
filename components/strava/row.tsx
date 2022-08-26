@@ -3,20 +3,12 @@ import classNames from "classnames";
 import Link from "next/link";
 import { clearLine } from "readline";
 import { Activity } from "../../common/Strava";
+import { normalizeDate, normalizeDistance, normalizeMovingTime } from "../../lib/utils";
 
 interface StravaRowProps {
   row: Row<Activity>;
   // showOnlyWithMap: boolean;
 }
-
-const options: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-};
 
 export default function StravaRow({ row }: StravaRowProps) {
   const cells = row.getVisibleCells();
@@ -59,7 +51,7 @@ export default function StravaRow({ row }: StravaRowProps) {
             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500" key={cell.id}>
               <div className="inline-flex">
                 <span className="txt" title="distance">
-                  {((cell.getValue() as number) / 1000).toFixed(2)}km
+                  {normalizeDistance(cell.getValue())}
                 </span>
                 {/* <span className="label label-warning">Verified</span> */}
               </div>
@@ -71,10 +63,7 @@ export default function StravaRow({ row }: StravaRowProps) {
             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500" key={cell.id}>
               <div className="inline-flex">
                 <span className="txt" title="moving_time">
-                  {new Date((cell.getValue() as number) * 1000)
-                    .toISOString()
-                    .substring(11, 16)}
-                  h
+                  {normalizeMovingTime(cell.getValue())}
                 </span>
                 {/* <span className="label label-warning">Verified</span> */}
               </div>
@@ -86,11 +75,7 @@ export default function StravaRow({ row }: StravaRowProps) {
             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500" key={cell.id}>
               <div className="inline-flex">
                 <span className="txt" title="start_date">
-                  {new Date(cell.getValue() as any).toLocaleDateString(
-                    undefined,
-                    options
-                  )}
-                  h
+                  {normalizeDate(cell.getValue())}
                 </span>
                 {/* <span className="label label-warning">Verified</span> */}
               </div>

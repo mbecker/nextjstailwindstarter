@@ -338,9 +338,9 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
 
     activitiesFetch(undefined, false);
 
-    client.realtime.subscribe("activities", function (a) {
-      console.log(a);
-    });
+    // client.realtime.subscribe("activities", function (a) {
+    //   console.log(a);
+    // });
 
     return () => {
       client.AuthStore.clear();
