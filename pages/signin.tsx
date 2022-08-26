@@ -28,7 +28,7 @@ const SignIn = ({}: Props) => (
           aria-label="Continue with Strava"
           role="button"
           onClick={() => signIn("strava")}
-          className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-400 py-3.5 px-4 border rounded-none border-slate-700 flex items-center"
+          className="focus:outline-none ring-2 ring-offset-0 ring-sky-400 py-3.5 px-4  rounded-none flex items-center"
         >
           <picture>
             <source srcSet="/images/strava_128.png" type="image/png" />
