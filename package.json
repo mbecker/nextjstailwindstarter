@@ -16,7 +16,6 @@
     "@tanstack/react-table": "^8.3.0",
     "classnames": "^2.3.1",
     "fabric": "^5.2.4",
-    "fabricjs-react": "^1.0.8",
     "form-data": "^4.0.0",
     "lodash": "^4.17.21",
     "next": "12.2.4",
