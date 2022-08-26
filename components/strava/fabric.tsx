@@ -1,0 +1,98 @@
+import React, { createRef, useCallback, useEffect, useRef } from "react";
+
+import { fabric } from "fabric";
+import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
+import { Activity } from "../../common/Strava";
+import { Transform } from "fabric/fabric-impl";
+
+type Props = {
+  activity: Activity;
+};
+const useFabric = (activity: Activity) => {
+  
+  const canvas = useRef<any | null>(null);
+  const fabricRef = useCallback((element: any) => {
+    if (!element) return canvas.current?.dispose();
+
+    canvas.current = new fabric.Canvas(element);
+    canvas.current.setDimensions({width: '100%', height: '100%'}, {cssOnly: true});
+    
+    const url = `${process.env.NEXT_PUBLIC_POCKETBASE_URL}/api/strava/map/${activity.id}?width=800&height=600`;
+    // Background Image (Map)
+    // fabric.Image.fromURL(
+    //   ,
+    //   function (oImg) {
+    //     oImg.lockMovementX = true;
+    //     oImg.lockMovementY = true;
+    //     oImg.selectable = false;
+    //     canvas.current.add(oImg);
+    //   }
+    // );
+
+const scaleX = element.clientWidth / 800;
+const scaleY = element.clientHeight / 600;
+
+    const mapImage = fabric.Image.fromURL(url, function(img) {
+      console.log("Client Width: ", element.clientWidth)
+      console.log("Witdh: ", canvas.current.getWidth())
+      console.log("Client Height: ", canvas.current.getHeight())
+      console.log("Height: ", canvas.current.getHeight())
+      img.set({
+        width: element.clientWidth, // canvas.current.getWidth(), 
+        height: 600 * scaleX, 
+        originX: 'left', 
+        originY: 'top'
+    });
+    canvas.current.setBackgroundImage(img, canvas.current.renderAll.bind(canvas.current));
+      // add background image
+      // canvas.current.setBackgroundImage(img, canvas.current.renderAll.bind(canvas.current), {
+      //    scaleX: canvas.current.width / img.width!,
+      //    scaleY: canvas.current.height / img.height!
+      // });
+   });
+
+    canvas.current.add(
+      new fabric.Rect({
+        top: 100,
+        left: 100,
+        width: 100,
+        height: 100,
+        fill: "red",
+      })
+    );
+
+    
+    
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (activity === null || typeof activity === "undefined") return null;
+  const handleResize = () => {
+    console.log("Resite GetWitdh: ", canvas.current.getWidth())
+    const scaleX = canvas.current.getWidth()> 800 ? 1 : canvas.current.getWidth()/ 800;
+    console.log("Resize scaleX: ", scaleX)
+    canvas.current.setWidth(canvas.current.getWidth()> 800 ? 800 : canvas.current.getWidth())
+    canvas.current.setHeight(600 * scaleX);
+    canvas.current.renderAll();
+  }
+  window.addEventListener('resize', handleResize)
+  return fabricRef;
+};
+
+const Fabric = ({ activity }: Props) => {
+
+  const fabricRef = useFabric(activity);
+
+  return (
+    <div className="bg-slate-50 flex flex-col justify-center items-center w-full min-h-[600px] h-[600px]">
+      {/* <div className="flex flex-row space-x-1">
+        <button onClick={onAddCircle}>Add circle</button>
+        <button onClick={onAddRectangle}>Add Rectangle</button>
+      </div> */}
+      <canvas ref={fabricRef} width={800} height={600} />;
+      {/* <FabricJSCanvas className="w-[800px] h-[600px]" onReady={onReady} /> */}
+    </div>
+  );
+};
+
+export default Fabric;
