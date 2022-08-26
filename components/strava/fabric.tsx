@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect, useRef } from "react";
+import React, { createRef, useCallback, useEffect, useRef, useState } from "react";
 
 import { fabric } from "fabric";
 import { Activity } from "../../common/Strava";
@@ -69,7 +69,7 @@ const useFabric = (activity: Activity) => {
       canvas.current.getWidth() > 800 ? 800 : canvas.current.getWidth()
     );
     canvas.current.setHeight(600 * scaleX);
-    canvas.current.renderAll();
+    // canvas.current.renderAll();
   };
   window.addEventListener("resize", handleResize);
   return fabricRef;
@@ -82,6 +82,9 @@ const Fabric = ({ activity }: Props) => {
   const fabricRef = useRef<any | null>();
   const canvas = useRef<any | null>();
   const mapImage = useRef<fabric.Image>();
+  const titleText = useRef<fabric.Text>();
+
+  const [selectedObject, setSelectedObject] = useState<any|null>(null);
 
   const handleResize = () => {
     const scaleXTmp =
@@ -107,11 +110,11 @@ const Fabric = ({ activity }: Props) => {
 
     const ratio = 800 / 600;
     // const containerWidth = containerRef.current.clientWidth;
-    const scale          = widthXTmp / canvas.current.getWidth();
-    const zoom           = canvas.current.getZoom() * scale;
-
-    canvas.current.setDimensions({width: widthXTmp, height: heightXTmp});
-    canvas.current.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+    const scale = widthXTmp / 800;
+    // const zoom =  scale;
+console.log("widthXTmp=" + widthXTmp + ", scaleXTmp: ", scaleXTmp)
+    canvas.current.setDimensions({ width: widthXTmp, height: heightXTmp });
+    canvas.current.setViewportTransform([scaleXTmp, 0, 0, scaleXTmp, 0, 0]);
 
     // mapImage.current!.set({
     //   // width: containerRef.current.clientWidth,
@@ -127,9 +130,7 @@ const Fabric = ({ activity }: Props) => {
   };
 
   useEffect(() => {
-    canvas.current = new fabric.Canvas(fabricRef.current, {
-      
-    });
+    canvas.current = new fabric.Canvas(fabricRef.current, {});
     const scaleX =
       containerRef.current.clientWidth > 800
         ? 1
@@ -143,93 +144,104 @@ const Fabric = ({ activity }: Props) => {
     console.log("Client Width: ", containerRef.current.clientWidth);
 
     console.log("Client Height: ", canvas.current.getHeight());
-    
-    console.log("witdhx=" + widthX + ",heightx=" + heightX);
+
+    console.log(
+      "witdhx=" + widthX + ",heightx=" + heightX + ",sclaeX=" + scaleX
+    );
     canvas.current.setDimensions(
       { width: widthX, height: heightX },
       { cssOnly: false }
     );
-    const scale          = widthX / canvas.current.getWidth();
-    
-    canvas.current.setZoom(scale);
-    console.log("Zoom: ", scale)
 
-
+    canvas.current.setZoom(scaleX);
 
     const url = `${process.env.NEXT_PUBLIC_POCKETBASE_URL}/api/strava/map/${activity.id}?width=800&height=600`;
     fabric.Image.fromURL(url, function (img) {
-      mapImage.current = img;
-      img.set({
-        // width: containerRef.current.clientWidth,
-        // height: containerRef.current.clientHeight,
-        originX: "left",
-        originY: "top",
-        scaleX: scaleX,
-        scaleY: heightX / img.height!,
-        crossOrigin: 'anonymous',
-      });
+      // mapImage.current = img;
+      // img.set({
+      //   // width: containerRef.current.clientWidth,
+      //   // height: containerRef.current.clientHeight,
+      //   originX: "left",
+      //   originY: "top",
+      //   scaleX: scaleX,
+      //   scaleY: heightX / img.height!,
+      //   crossOrigin: 'anonymous',
+      // });
+      if (canvas.current === null) return;
       canvas.current.setBackgroundImage(
         img,
-        canvas.current.renderAll.bind(canvas.current), {
-          crossOrigin: 'anonymous',
+        canvas.current.renderAll.bind(canvas.current),
+        {
+          crossOrigin: "anonymous",
+          width: 800,
+          height: 600,
+          originX: "left",
+          originY: "top",
         }
-
       );
-      // canvas.current.setBackgroundImage(
-      //   img,
-      //   canvas.current.renderAll.bind(canvas.current, {
-      //     width: containerRef.current.clientWidth,
-      //     height: containerRef.current.clientHeight,
-      //     originX: "left",
-      //     originY: "top",
-      //     scaleX: containerRef.current.clientWidth / img.width!,
-      //     scaleY: containerRef.current.clientHeight / img.height!,
-      //   })
-      // );
-      // add background image
-      // canvas.current.setBackgroundImage(img, canvas.current.renderAll.bind(canvas.current), {
-      //    scaleX: canvas.current.width / img.width!,
-      //    scaleY: canvas.current.height / img.height!
-      // });
     });
 
-    var titletextbox = new fabric.Textbox(activity.name, {
-      left: 10,
-      top: 10,
-      fontSize: 48,
-      fontWeight: 'bold',
-      fontFamily: "'Roboto', sans-serif",
-      fill: '#F34E3A',
-      lineHeight: 1.1,
-      // width: canvas.width - 48 * 2,
-    });
+    
 
-
-  // Render the Text on Canvas
-  canvas.current.add(titletextbox);
-  // canvas.current.renderAll();
-
+    // Render the Text on Canvas
+    // canvas.current.add(titleText.current);
+    canvas.current.on('selection:cleared', function () {
+      setSelectedObject(null);
+   });
+    canvas.current.renderAll();
+addText();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
+      canvas.current.dispose();
     };
   }, []);
 
+  const addText = () => {
+    const t = new fabric.Text(activity.name, {
+      left: 10,
+      top: 10,
+      fontSize: 48,
+      fontWeight: "bold",
+      fontFamily: "'Roboto', sans-serif",
+      fill: "rgb(14 165 233 / 1)",
+      lineHeight: 1.1,
+      // width: canvas.width - 48 * 2,
+    });
+    t.on('selected', function() {
+      console.log('selected a rectangle');
+      setSelectedObject(t);
+  });
+    canvas.current.add(t);
+    canvas.current.renderAll();
+  }
+
   return (
-    <div
-      className="flex flex-col justify-center items-center w-full my-2"
-      
-    >
+    <>
+  
+    <div className="relative flex flex-col justify-center items-center w-full my-2">
+    {
+      selectedObject !== null && (
+        <div className="z-50 absolute top-0 right-0 bottom-0 bg-white shadow-lg w-12">
+        hi
+        </div>
+      )
+    }
       {/* <div className="flex flex-row space-x-1">
-        <button onClick={onAddCircle}>Add circle</button>
+        <button onClick={() => addText()}>Add circle</button>
         <button onClick={onAddRectangle}>Add Rectangle</button>
       </div> */}
-      <div className="w-full flex justify-center items-center" ref={containerRef}>
-      <canvas ref={fabricRef} className="w-full h-full"/>
+      <div
+        className="w-full flex justify-center items-center"
+        ref={containerRef}
+      >
+        <canvas ref={fabricRef} className="w-full h-full" />
       </div>
-      
+
       {/* <FabricJSCanvas className="w-[800px] h-[600px]" onReady={onReady} /> */}
     </div>
+   
+    </>
   );
 };
 
