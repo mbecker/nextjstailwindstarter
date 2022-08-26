@@ -98,16 +98,20 @@ const Fabric = ({ activity }: Props) => {
     //   { width: widthXTmp, height: heightXTmp },
     //   { cssOnly: false }
     // );
-    canvas.current.setWidth(widthXTmp);
-    canvas.current.setHeight(heightXTmp)
-    mapImage.current!.set({
-      // width: containerRef.current.clientWidth,
-      // height: containerRef.current.clientHeight,
-      originX: "left",
-      originY: "top",
-      scaleX: scaleXTmp,
-      scaleY: heightXTmp / 600,
-    });
+    // canvas.current.setWidth(widthXTmp);
+    // canvas.current.setHeight(heightXTmp)
+    canvas.current.setDimensions(
+      { width: widthXTmp, height: heightXTmp },
+      { cssOnly: false }
+    );
+    // mapImage.current!.set({
+    //   // width: containerRef.current.clientWidth,
+    //   // height: containerRef.current.clientHeight,
+    //   originX: "left",
+    //   originY: "top",
+    //   scaleX: scaleXTmp,
+    //   scaleY: heightXTmp / 600,
+    // });
     // console.log(mapImage.current);
     // canvas.current.scaleToWidth(widthXTmp);
     canvas.current.renderAll();
@@ -178,7 +182,7 @@ const Fabric = ({ activity }: Props) => {
 
   return (
     <div
-      className="bg-slate-50 flex flex-col justify-start items-center w-full min-h-[600px] h-[600px]"
+      className="flex flex-col justify-start items-center w-full my-2"
       ref={containerRef}
     >
       {/* <div className="flex flex-row space-x-1">
