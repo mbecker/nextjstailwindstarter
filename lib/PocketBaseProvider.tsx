@@ -60,6 +60,7 @@ export interface PocketBaseContext {
   ) => Promise<void>;
   activitesLoading: boolean;
   activitiesHasMore: boolean;
+  activititesTotalItems: number;
 }
 
 export const PocketBaseContext = createContext<PocketBaseContext>({
@@ -72,12 +73,18 @@ export const PocketBaseContext = createContext<PocketBaseContext>({
   activitiesFetchForce: async () => {},
   activitesLoading: false,
   activitiesHasMore: true,
+  activititesTotalItems: 0
 });
 
 export interface MessageInterface {
   message?: string;
   type?: "SUCCESS" | "ERROR" | "INFO";
 }
+
+type QueryParams = {
+  sort: string;
+  filter: string;
+};
 
 export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
   // Initialize PocketBase client with session props
@@ -89,6 +96,8 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
   const [activitiesHasMore, setActivitiesHasMore] = useState<boolean>(true);
   // const [activitesPage, setActivitesPage] = useState<number>(0);
   const [activitesLoading, setActivitesLoading] = useState<boolean>(false);
+
+  const [activititesTotalItems, setActivititesTotalItems] = useState<number>(0);
 
   const activitiesFetch = useCallback(
     async (
@@ -104,7 +113,21 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
         beforeAfter,
         id
       );
-      let queryParams: any = {
+
+      if (
+        activities.length === activititesTotalItems &&
+        activititesTotalItems !== 0
+      ) {
+        console.info(
+          "All activities are already requested from the db: activities.length=",
+          activities.length
+        );
+        setActivitiesHasMore(false);
+        enqueueSnackbar("All items requested");
+        return;
+      }
+
+      let queryParams: QueryParams = {
         sort: "-start_date",
         filter: "",
       };
@@ -139,78 +162,33 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
       console.log("QueryParams: ", queryParams);
 
       try {
-        setActivitesLoading(false);
+        setActivitesLoading(true);
         const result = await client.Records.getList(
           "activities",
           1,
-          20,
+          100,
           queryParams
         );
-        // console.log("=== PocketBaseProvider: result=", result);
-        // console.log(
-        //   "=== PocketBaseProvider: result totalitems length=",
-        //   result.totalItems
-        // );
-        // console.log(
-        //   "=== PocketBaseProvider: result items length=",
-        //   result.items.length
-        // );
-        // console.log("=== PocketBaseProvider: activities=", activities)
+        console.log("=== PocketBaseProvider: result=", result);
+        // Set the new activities
+        setNewActivities(result["items"], showToast, beforeAfter);
 
-        // setActivitesTotal(result.totalItems);
-        let newActivites: Activities = [];
-        result["items"].forEach((a) => {
-          if (typeof a["activity"] !== "undefined") {
-            let ac: Activity = a["activity"] as Activity;
-            newActivites.push(ac);
-          }
-        });
-        // console.log(
-        //   "=== PocketBaseProvider: Request new activities length=",
-        //   newActivites.length
-        // );
-        // console.log("=== PocketBaseProvider: newActivities=", newActivites)
-        const newItems = orderBy(
-          unionBy(activities, newActivites, "id"),
-          "id",
-          "desc"
-        );
-        const newItemsLength = activities.length - newItems.length;
-        if (typeof showToast === "undefined" || showToast === true) {
-          // setMessage({
-          //   message:
-          //     newItemsLength === 0
-          //       ? typeof beforeAfter !== "undefined" && beforeAfter === "after"
-          //         ? `No new items from Strava`
-          //         : `No items`
-          //       : `Requested ${
-          //           -newItemsLength > 0 ? -newItemsLength : newItemsLength
-          //         } items`,
-          //   type: newItemsLength === 0 ? "ERROR" : "SUCCESS",
-          // });
-          enqueueSnackbar(
-            newItemsLength === 0
-              ? typeof beforeAfter !== "undefined" && beforeAfter === "after"
-                ? `No new items from Strava`
-                : `No items`
-              : `Requested ${
-                  -newItemsLength > 0 ? -newItemsLength : newItemsLength
-                } items`
-          );
+        // It's the initial request without any filter (like smaller than dpecific date)
+        // The result.totalItems has the total numer of ALL items
+        if (queryParams.filter.length === 0 && typeof date === "undefined") {
+          setActivititesTotalItems(result.totalItems);
         }
-        setActivities(newItems);
-        
 
         // The reuest is 'force' (Strava was requested before): The page.items may be 0 (or any number) because no new Strava activities are uploaded
-        if (typeof beforeAfter !== "undefined" && beforeAfter === BEFORE) {
-          console.log(
-            "setActivitiesHasMore: ",
-            result.items.length !== 0 && result.items.length === 20
-          );
-          setActivitiesHasMore(
-            result.items.length !== 0 && result.items.length === 20
-          );
-        }
+        // if (typeof beforeAfter !== "undefined" && beforeAfter === BEFORE) {
+        //   console.log(
+        //     "setActivitiesHasMore: ",
+        //     result.items.length !== 0 && result.items.length === 20
+        //   );
+        //   setActivitiesHasMore(
+        //     result.items.length !== 0 && result.items.length === 20
+        //   );
+        // }
       } catch (err: any) {
         console.error(
           "=== PocketBaseProvider: Error requesting items err=",
@@ -225,7 +203,7 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
       }
       setActivitesLoading(false);
     },
-    [activities]
+    [activities, enqueueSnackbar]
   );
 
   const activitiesFetchForce = useCallback(
@@ -264,16 +242,16 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
       try {
         const data = await client.send("/api/strava/activities", reqConfig);
         console.log(
-          "=== PocketBaseProvider: Request items length=",
-          data.length
+          "=== PocketBaseProvider: Request items data=",
+          data
         );
+        setNewActivities(data, true, beforeAfter);
         // setActivities(unionBy(activities, (data as unknown as Activities), "id"));
-        await activitiesFetch(date, true, beforeAfter);
+        // await activitiesFetch(date, true, beforeAfter);
         // setMessage({
         //   message: "Succes requesting items",
         //   type: "SUCCESS",
         // });
-        setActivitesLoading(false);
       } catch (err: any) {
         console.warn(JSON.stringify(err, undefined, 2));
         if (typeof err["status"] !== "undefined") {
@@ -288,33 +266,81 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
         } else {
           enqueueSnackbar("Requesting Strava activities - " + err);
         }
-        setActivitesLoading(false);
       }
+      setActivitesLoading(false);
     },
     [activitiesFetch, enqueueSnackbar]
   );
 
+  const setNewActivities = useCallback(
+    (
+      items: any[],
+      showToast?: undefined | boolean,
+      beforeAfter?: BEFORE | AFTER
+    ) => {
+      let newActivites: Activities = [];
+      items.forEach((a) => {
+        if (typeof a["activity"] !== "undefined") {
+          let ac: Activity = a["activity"] as Activity;
+          newActivites.push(ac);
+        } else if (typeof a["start_date"] !== "undefined") {
+          newActivites.push(a as Activity);
+        }
+      });
+      const newItems = orderBy(
+        unionBy(activities, newActivites, "id"),
+        "id",
+        "desc"
+      );
+      const newItemsLength = activities.length - newItems.length;
+      if (typeof showToast === "undefined" || showToast === true) {
+        enqueueSnackbar(
+          newItemsLength === 0
+            ? typeof beforeAfter !== "undefined" && beforeAfter === "after"
+              ? `No new items from Strava`
+              : `No items`
+            : `Requested ${
+                -newItemsLength > 0 ? -newItemsLength : newItemsLength
+              } items`
+        );
+      }
+      setActivities(newItems);
+      // All activites are requested from the DB
+      if (newItems.length === activititesTotalItems) {
+        setActivitiesHasMore(false);
+      } else {
+        setActivitiesHasMore(true);
+      }
+      // We requested force from strava because all items were already requested from DB; new items may be more than than the inital request items length of the DB
+      if(newItems.length > activititesTotalItems) {
+        setActivititesTotalItems(newItems.length);
+      }
+    },
+    [activities, activititesTotalItems, enqueueSnackbar]
+  );
+
   useEffect(() => {
     if (session === null || typeof session === "undefined") {
-      console.log("=== PocketBaseProvider: AuthStore.clear");
+      // console.log("=== PocketBaseProvider: AuthStore.clear");
       client.AuthStore.clear();
       return;
     }
     if (client.AuthStore.token.length > 0) return;
-    console.log(
-      "=== PocketBaseProvider: AuthStore.save token=",
-      session.profile.authdata.token
-    );
-    console.log(
-      "=== PocketBaseProvider: AuthStore.save user=",
-      session.profile.authdata.user
-    );
+    // console.log(
+    //   "=== PocketBaseProvider: AuthStore.save session.profile=",
+    //   session.profile
+    // );
+
     client.AuthStore.save(
       session.profile.authdata.token,
       session.profile.authdata.user
     );
 
     activitiesFetch(undefined, false);
+
+    client.realtime.subscribe("activities", function (a) {
+      console.log(a);
+    });
 
     return () => {
       client.AuthStore.clear();
@@ -333,6 +359,7 @@ export const PocketBaseProvider = ({ children }: React.PropsWithChildren) => {
         activitiesFetchForce: activitiesFetchForce,
         activitesLoading: activitesLoading,
         activitiesHasMore: activitiesHasMore,
+        activititesTotalItems: activititesTotalItems,
       }}
     >
       <>{children}</>
