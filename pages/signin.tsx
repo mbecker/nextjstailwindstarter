@@ -18,8 +18,8 @@ const SignIn = ({}: Props) => (
     >
       <div className="sm:flex sm:items-start p-4">
         <div className="sm:flex-auto">
-          <h1 className={`text-base italic font-semibold text-slate-600`}>
-            Sign in to your account
+          <h1 className={`text-xs italic font-semibold text-slate-600`}>
+            Sign in with your Strava account
           </h1>
         </div>
       </div>
@@ -28,19 +28,16 @@ const SignIn = ({}: Props) => (
           aria-label="Continue with Strava"
           role="button"
           onClick={() => signIn("strava")}
-          className="focus:outline-none ring-2 ring-offset-0 ring-sky-400 py-3.5 px-4  rounded-none flex items-center"
+          className="focus:outline-none ring-0 ring-offset-0 ring-sky-400 py-3.5 px-4  rounded-none flex items-center"
         >
           <picture>
-            <source srcSet="/images/strava_128.png" type="image/png" />
+            <source srcSet="/images/btn_strava_connectwith_orange/btn_strava_connectwith_orange.svg" type="image/svg" />
             <img
-              src="/images/strava_128.png"
-              className="w-8 h-8"
+              src="/images/btn_strava_connectwith_orange/btn_strava_connectwith_orange.svg"
+              className="w-full"
               alt="Strava"
             />
           </picture>
-          <p className="text-base font-medium ml-4 text-slate-700">
-            Continue with Strava
-          </p>
         </button>
       </div>
     </div>

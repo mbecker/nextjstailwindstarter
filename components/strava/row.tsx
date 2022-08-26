@@ -44,7 +44,7 @@ export default function StravaRow({ row }: StravaRowProps) {
         }
         if (cell.column.id === "name") {
           return (
-            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500" key={cell.id}>
+            <td className="break-before-auto max-w-xs px-3 py-4 text-sm text-gray-500" key={cell.id}>
               <div className="inline-flex">
                 <span className="txt" title={cell.id}>
                   {`${cell.getValue()}`}
