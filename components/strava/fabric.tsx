@@ -298,6 +298,7 @@ const Fabric = ({ activity }: Props) => {
           <SliderPicker
             className="z-50 w-72"
             onChangeComplete={handleChangeComplete}
+            onChange={handleChangeComplete}
             color={selectedObject.fill}
           />
         </div>
