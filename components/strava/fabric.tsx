@@ -1,9 +1,27 @@
-import React, { createRef, useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  createRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { fabric } from "fabric";
 import { Activity } from "../../common/Strava";
 import { Transform } from "fabric/fabric-impl";
-
+import {
+  BlockPicker,
+  ColorChangeHandler,
+  ColorResult,
+  GithubPicker,
+  SliderPicker,
+} from "react-color";
+import {
+  normalizeDate,
+  normalizeDateSplit,
+  normalizeDistance,
+  normalizeMovingTime,
+} from "../../lib/utils";
 type Props = {
   activity: Activity;
 };
@@ -84,7 +102,7 @@ const Fabric = ({ activity }: Props) => {
   const mapImage = useRef<fabric.Image>();
   const titleText = useRef<fabric.Text>();
 
-  const [selectedObject, setSelectedObject] = useState<any|null>(null);
+  const [selectedObject, setSelectedObject] = useState<any | null>(null);
 
   const handleResize = () => {
     const scaleXTmp =
@@ -112,7 +130,7 @@ const Fabric = ({ activity }: Props) => {
     // const containerWidth = containerRef.current.clientWidth;
     const scale = widthXTmp / 800;
     // const zoom =  scale;
-console.log("widthXTmp=" + widthXTmp + ", scaleXTmp: ", scaleXTmp)
+    console.log("widthXTmp=" + widthXTmp + ", scaleXTmp: ", scaleXTmp);
     canvas.current.setDimensions({ width: widthXTmp, height: heightXTmp });
     canvas.current.setViewportTransform([scaleXTmp, 0, 0, scaleXTmp, 0, 0]);
 
@@ -167,7 +185,7 @@ console.log("widthXTmp=" + widthXTmp + ", scaleXTmp: ", scaleXTmp)
       //   scaleY: heightX / img.height!,
       //   crossOrigin: 'anonymous',
       // });
-      if (canvas.current === null) return;
+      if (typeof canvas["current"] === "undefined") return;
       canvas.current.setBackgroundImage(
         img,
         canvas.current.renderAll.bind(canvas.current),
@@ -181,15 +199,13 @@ console.log("widthXTmp=" + widthXTmp + ", scaleXTmp: ", scaleXTmp)
       );
     });
 
-    
-
     // Render the Text on Canvas
     // canvas.current.add(titleText.current);
-    canvas.current.on('selection:cleared', function () {
+    canvas.current.on("selection:cleared", function () {
       setSelectedObject(null);
-   });
+    });
     canvas.current.renderAll();
-addText();
+    addText();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -208,39 +224,93 @@ addText();
       lineHeight: 1.1,
       // width: canvas.width - 48 * 2,
     });
-    t.on('selected', function() {
-      console.log('selected a rectangle');
+    t.on("selected", function () {
       setSelectedObject(t);
-  });
+    });
     canvas.current.add(t);
+
+    const tsub = new fabric.Text(`${normalizeDateSplit(activity.start_date)}`, {
+      left: 10,
+      top: 64,
+      fontSize: 32,
+      fontWeight: "bold",
+      fontFamily: "'Roboto', sans-serif",
+      fill: "#EB144C",
+      lineHeight: 1.1,
+      // width: canvas.width - 48 * 2,
+    });
+    tsub.on("selected", function () {
+      setSelectedObject(tsub);
+    });
+    canvas.current.add(tsub);
+
+    const tsub2 = new fabric.Text(
+      `${normalizeMovingTime(activity.moving_time)}`,
+      {
+        left: 10,
+        top: 64 + 32,
+        fontSize: 32,
+        fontWeight: "bold",
+        fontFamily: "'Roboto', sans-serif",
+        fill: "#EB144C",
+        lineHeight: 1.1,
+        // width: canvas.width - 48 * 2,
+      }
+    );
+    tsub2.on("selected", function () {
+      setSelectedObject(tsub2);
+    });
+    canvas.current.add(tsub2);
+
+    const tsub3 = new fabric.Text(`${normalizeDistance(activity.distance)}`, {
+      left: 10,
+      top: 64 + 32 + 32,
+      fontSize: 32,
+      fontWeight: "bold",
+      fontFamily: "'Roboto', sans-serif",
+      fill: "#EB144C",
+      lineHeight: 1.1,
+      // width: canvas.width - 48 * 2,
+    });
+    tsub3.on("selected", function () {
+      setSelectedObject(tsub3);
+    });
+    canvas.current.add(tsub3);
+
     canvas.current.renderAll();
-  }
+  };
+
+  const handleChangeComplete = (
+    color: ColorResult,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (selectedObject === null) return;
+    console.log(color);
+    selectedObject.set({ fill: color.hex });
+    canvas.current.renderAll();
+  };
 
   return (
     <>
-  
-    <div className="relative flex flex-col justify-center items-center w-full my-2">
-    {
-      selectedObject !== null && (
-        <div className="z-50 absolute top-0 right-0 bottom-0 bg-white shadow-lg w-12">
-        hi
+      {selectedObject !== null && (
+        <div className="fixed bottom-12 before:rounded-xl before:shadow-lg flex space-x-2 items-center z-50 px-2 py-4 font-semibold italic before:block before:absolute before:-inset-1 before:skew-y-2 before:bg-white">
+          {/* <GithubPicker className="z-50 " triangle="hide" width="300px"/> */}
+          <SliderPicker
+            className="z-50 w-72"
+            onChangeComplete={handleChangeComplete}
+            color={selectedObject.fill}
+          />
         </div>
-      )
-    }
-      {/* <div className="flex flex-row space-x-1">
-        <button onClick={() => addText()}>Add circle</button>
-        <button onClick={onAddRectangle}>Add Rectangle</button>
-      </div> */}
-      <div
-        className="w-full flex justify-center items-center"
-        ref={containerRef}
-      >
-        <canvas ref={fabricRef} className="w-full h-full" />
-      </div>
+      )}
 
-      {/* <FabricJSCanvas className="w-[800px] h-[600px]" onReady={onReady} /> */}
-    </div>
-   
+      <div className="flex flex-row my-0 w-full">
+        <div
+          className="w-full min-h-full h-full flex justify-center items-center"
+          ref={containerRef}
+        >
+          <canvas ref={fabricRef} className="w-full h-full shadow-lg rounded-lg" />
+        </div>
+      </div>
     </>
   );
 };

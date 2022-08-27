@@ -18,6 +18,11 @@ export function normalizeDate(dt: any): string {
   return new Date(dt).toLocaleDateString(undefined, options);
 }
 
+export function normalizeDateSplit(dt: any): string {
+  const dts = new Date(dt).toLocaleDateString(undefined, options).split(', ');
+  return dts[1] + '@' + dts[0];
+}
+
 export function normalizeMovingTime(dt: any): string {
   return `${new Date((dt as number) * 1000).toISOString().substring(11, 16)}h`;
 }
