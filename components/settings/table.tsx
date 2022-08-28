@@ -1,5 +1,6 @@
 import { MailOpenIcon } from "@heroicons/react/outline";
 import { MailIcon } from "@heroicons/react/solid";
+import Link from "next/link";
 import React from "react";
 
 type Props = {
@@ -72,7 +73,32 @@ const SettingsTable = ({ title, subtitle }: Props) => (
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
-                      
+                    <Link
+                  href={{
+                    pathname: "/maps/1",
+                  }}
+                >
+                  <a
+                    type="button"
+                    className="btn-main"
+                  >
+                    <i className="ri-map-2-line" />
+                    <span className="txt">Delete</span>
+                  </a>
+                </Link>
+                <Link
+                  href={{
+                    pathname: "/maps/1",
+                  }}
+                >
+                  <a
+                    type="button"
+                    className="btn-main ml-2"
+                  >
+                    <i className="ri-map-2-line" />
+                    <span className="txt">Resend</span>
+                  </a>
+                </Link>
                     </td>
                   </tr>
                 </tbody>
