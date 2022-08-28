@@ -72,22 +72,7 @@ const SettingsTable = ({ title, subtitle }: Props) => (
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
-                      <a
-                        type="button"
-                        className="btn-main"
-                        href="/maps/7693442326"
-                      >
-                        <i className="ri-map-2-line"></i>
-                        <span className="txt">Send new confirmation</span>
-                      </a>
-                      <a
-                        type="button"
-                        className="btn-main ml-2"
-                        href="/maps/7693442326"
-                      >
-                        <i className="ri-map-2-line"></i>
-                        <span className="txt">Delete</span>
-                      </a>
+                      
                     </td>
                   </tr>
                 </tbody>
