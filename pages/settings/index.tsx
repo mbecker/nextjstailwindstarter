@@ -2,6 +2,7 @@ import { ExclamationCircleIcon, MailIcon } from "@heroicons/react/outline";
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
+import SettingsForm from "../../components/Form";
 import { Modal } from "../../components/Modal";
 
 import SettingsTable from "../../components/settings/table";
@@ -40,23 +41,11 @@ const Settings: NextPage = ({}: Props) => {
       </div>
 
       {/* TABLE START */}
-      <div className="p-4 mt-4">
-        <h5 className="text-xl font-semibold">Emails</h5>
+     
+      <div className="p-4">
+        <SettingsForm />
       </div>
-      <SettingsTable />
-      <Modal open={addEmail} setOpen={(b) => setAddEmail(b)} />
-      <div className="p-4 mt-4 flex items-center space-x-2">
-        <button
-          disabled={false}
-          onClick={(e: React.MouseEvent) => {
-            e.preventDefault();
-            setAddEmail(!addEmail);
-          }}
-          className="btn-main"
-        >
-          Add new e-mail
-        </button>
-      </div>
+
       {/* TABLE END */}
       {/* MAPS START */}
       <div className="p-4 mt-4">
