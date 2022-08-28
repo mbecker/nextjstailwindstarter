@@ -22,6 +22,7 @@ import {
   normalizeDistance,
   normalizeMovingTime,
 } from "../../lib/utils";
+import { useOnClickOutside } from "../../lib/hooks";
 type Props = {
   activity: Activity;
 };
@@ -93,7 +94,8 @@ const useFabric = (activity: Activity) => {
   return fabricRef;
 };
 
-var deleteIcon = "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";
+var deleteIcon =
+  "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23000000;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";
 
 const Fabric = ({ activity }: Props) => {
   // const fabricRef = useFabric(activity);
@@ -152,41 +154,50 @@ const Fabric = ({ activity }: Props) => {
   useEffect(() => {
     canvas.current = new fabric.Canvas(fabricRef.current, {});
     fabric.Object.prototype.transparentCorners = false;
-  fabric.Object.prototype.cornerColor = 'black';
-  fabric.Object.prototype.cornerStyle = 'rect';
-  fabric.Object.prototype.cornerStrokeColor = 'black';
-  fabric.Object.prototype.stroke = 'black';
+    fabric.Object.prototype.cornerSize = 6;
+    fabric.Object.prototype.cornerColor = "black";
+    fabric.Object.prototype.cornerStyle = "rect";
+    fabric.Object.prototype.cornerStrokeColor = "black";
+    fabric.Object.prototype.borderColor = "black";
 
-  var img = document.createElement('img');
-  img.src = deleteIcon;
+    var img = document.createElement("img");
+    img.src = deleteIcon;
 
-  function deleteObject(eventData: MouseEvent, transformData: Transform, x: number, y: number): boolean {
-		var target = transformData.target;
-		
-		    canvas.current.remove(target);
-        canvas.current.requestRenderAll();
-        return false;
-	}
+    function deleteObject(
+      eventData: MouseEvent,
+      transformData: Transform,
+      x: number,
+      y: number
+    ): boolean {
+      var target = transformData.target;
+      canvas.current.remove(target);
+      canvas.current.requestRenderAll();
+      return false;
+    }
 
-  function renderIcon(ctx: any, left: any, top: any, styleOverride: any, fabricObject: any) {
-    var size = 24;
-    ctx.save();
-    ctx.translate(left, top);
-    ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
-    ctx.drawImage(img, -size/2, -size/2, size, size);
-    ctx.restore();
-  }
+    function renderIcon(
+      ctx: CanvasRenderingContext2D,
+      left: number,
+      top: number,
+      styleOverride: any,
+      fabricObject: fabric.Object
+    ) {
+      var size = 18;
+      ctx.save();
+      ctx.translate(left, top);
+      ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle as number));
+      ctx.drawImage(img, -size/2, -size/2, size, size);
+      ctx.restore();
+    }
 
-  fabric.Object.prototype.controls.deleteControl = new fabric.Control({
-    x: 0.5,
-    y: -1.2,
-    offsetY: 16,
-    cursorStyle: 'pointer',
-    mouseUpHandler: deleteObject,
-    render: renderIcon,
-    sizeX: 24,
-    sizeY: 24,
-  });
+    fabric.Object.prototype.controls.deleteControl = new fabric.Control({
+      x: -0.5,
+      y: -0.75,
+      offsetY: 0,
+      cursorStyle: 'pointer',
+      mouseUpHandler: deleteObject,
+      render: renderIcon,
+    });
 
     const scaleX =
       containerRef.current.clientWidth > 800
@@ -329,8 +340,13 @@ const Fabric = ({ activity }: Props) => {
     canvas.current.renderAll();
   };
 
+  useOnClickOutside(containerRef, () => {
+    if(canvas.current === null) return;
+    canvas.current.discardActiveObject().renderAll()
+  });
+
   return (
-    <>
+    <div ref={containerRef}>
       {selectedObject !== null && (
         <div className="fixed bottom-0 left-0 right-0 w-72 mx-auto mb-12 z-40">
           <div className="flex items-center justify-center space-x-2 z-50 px-2 py-4 before:rounded-md before:shadow-md before:ring-1 before:ring-gray-400 before:block before:absolute before:-inset-1 before:skew-y-2 before:bg-white">
@@ -348,7 +364,7 @@ const Fabric = ({ activity }: Props) => {
       <div className="flex flex-row my-0 w-full">
         <div
           className="w-full min-h-full h-full flex justify-center items-center"
-          ref={containerRef}
+          
         >
           <canvas
             ref={fabricRef}
@@ -356,7 +372,7 @@ const Fabric = ({ activity }: Props) => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
