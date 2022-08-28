@@ -27,7 +27,7 @@ const Settings: NextPage = ({}: Props) => (
         <h1
           className={`text-2xl font-semibold italic before:block before:absolute before:-inset-1 before:-skew-y-3  relative inline-block ${pageColor.before}`}
         >
-          <span className="relative text-white">Activities</span>
+          <span className="relative text-white">Settings</span>
         </h1>
       </div>
       <div className="flex space-x-1 mt-0"></div>
