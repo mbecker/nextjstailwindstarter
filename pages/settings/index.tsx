@@ -1,5 +1,8 @@
 import { NextPage } from "next";
+import dynamic from "next/dynamic";
 import React from "react";
+import SettingsTable from "../../components/settings/table";
+import { defaultActivity } from "../../lib/utils";
 
 import SettingsTwo from "./../../components/Settings";
 
@@ -7,28 +10,44 @@ type Props = {};
 
 const pageColor = { border: "border-slate-500", before: "before:bg-slate-500" };
 
+const Fabric = dynamic(
+  () => import("./../../components/strava/fabric"), // replace '@components/map' with your component's location
+  {
+    loading: () => <p>A map is loading</p>,
+    ssr: false, // This line is important. It's what prevents server-side render
+  }
+);
+
 const Settings: NextPage = ({}: Props) => (
   <div
-    className={`p-4 overflow-hidden shadow ring-1 ring-slate-200 ring-opacity-5 md:rounded-sm bg-white border-t-2 border-solid ${pageColor.border}`}
+    className={`overflow-hidden shadow ring-1 ring-slate-200 ring-opacity-5 md:rounded-sm bg-white border-t-2 border-solid ${pageColor.border}`}
   >
-    <div className="sm:flex sm:items-start">
+    <div className="flex flex-col md:flex-row space-y-6 items-start pt-4 px-4">
       <div className="sm:flex-auto">
         <h1
           className={`text-2xl font-semibold italic before:block before:absolute before:-inset-1 before:-skew-y-3  relative inline-block ${pageColor.before}`}
         >
-          <span className="relative text-white">Settings</span>
+          <span className="relative text-white">Activities</span>
         </h1>
-        <p className="hidden mt-4 text-sm text-slate-600">
-          A list of components
-        </p>
       </div>
-      <div className="hidden mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-        <button className="px-4 py-2 font-semibold text-sm bg-sky-500 text-white rounded-none shadow-sm">
-          Refresh
-        </button>
-      </div>
+      <div className="flex space-x-1 mt-0"></div>
     </div>
-    <div className="mt-8">
+
+    {/* TABLE START */}
+    <div className="p-4 mt-4">
+      <h5 className="text-xl font-semibold">Emails</h5>
+    </div>
+    <SettingsTable />
+    {/* TABLE END */}
+    {/* MAPS START */}
+    <div className="p-4 mt-4">
+      <h5 className="text-xl font-semibold">Maps</h5>
+    </div>
+    <div className="p-4">
+      <Fabric activity={defaultActivity} />
+    </div>
+    {/* MAPS END */}
+    <div className="mt-8 hidden">
       <SettingsTwo />
     </div>
   </div>

@@ -11,8 +11,8 @@ export interface Athlete {
     friend: string;
     follower: string;
     premium: boolean;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     approve_followers: boolean;
     badge_type_id: number;
 }

@@ -163,6 +163,36 @@ export default function SettingsTwo() {
               </ul>
             </div>
           </div>
+          <div className='mt-2'>
+          <div className="accordion-item mb-7.5">
+  <h3 className="mb-0 relative" id="faq-heading-1">
+    <button
+      type="button"
+      className="text-left text-lg leading-tight font-semibold py-5 px-[26px] w-full rounded-t shadow-2xl shadow-heading/10 bg-sky-500 text-white"
+      aria-expanded="true"
+      aria-controls="faq-content-1"
+    >
+      Multiple Platforms Supported for Teaching &amp; Studying
+    </button>
+    <span className="absolute right-4 top-1/2 -translate-y-1/2">
+      <i className="fa fa-minus-circle text-xl text-white" />
+    </span>
+  </h3>
+  <div
+    className="overflow-hidden font-normal leading-relaxed shadow-3xl shadow-heading/10 rounded-b"
+    id="faq-content-1"
+    aria-labelledby="faq-heading-1"
+    style={{ height: "100%", display: "block" }}
+  >
+    <p className="pt-[27px] pb-[39px] px-[25px]">
+      MaxCoach supports the act of teaching and learning on multiple platforms
+      like online or offline via material downloads. We know things aren’t
+      supposed to be devoured in a short time, you can always access our
+      knowledge base from any device.
+    </p>
+  </div>
+</div>
+          </div>
           <div className="hidden ring-1 ring-slate-200 ring-opacity-5 shadow sm:rounded-md sm:overflow-hidden">
             <div className="bg-white py-6 px-4 space-y- sm:p-6">
               <div>
